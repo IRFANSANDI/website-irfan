@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Petualangan Cerdas SD 1–6</title>
+<style>
+:root{--ink:#20304a;--blue:#3267e9;--sky:#dff4ff;--yellow:#ffd65a;--green:#39b982;--pink:#ff8fa3;--purple:#8d73e6;--paper:#fffdf6}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:linear-gradient(135deg,#dff7ff,#f5edff 55%,#fff5d6);min-height:100vh}
+button,select{font:inherit}button{cursor:pointer;border:0;border-radius:14px;padding:10px 15px;font-weight:800;color:white;background:var(--blue);box-shadow:0 4px 0 #2347a5;transition:.15s}button:hover{transform:translateY(-2px)}button:active{transform:translateY(2px);box-shadow:none}button.secondary{background:#e8efff;color:#28437c;box-shadow:0 3px 0 #b9c9f2}button.gold{background:#ffb928;color:#5a3900;box-shadow:0 4px 0 #cf8910}button.green{background:var(--green);box-shadow:0 4px 0 #20865d}button.pink{background:var(--pink);box-shadow:0 4px 0 #cc5e76}button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+header{position:sticky;top:0;z-index:10;background:#ffffffdf;backdrop-filter:blur(10px);border-bottom:2px solid #dbe6ff;padding:10px max(12px,calc((100vw - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:1000;font-size:clamp(17px,2vw,23px)}.logo{display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,#ffd65a,#ff9d55);font-size:26px}
+.stats{display:flex;gap:8px;flex-wrap:wrap}.pill{background:#f0f4ff;border:1px solid #d7e1ff;padding:7px 11px;border-radius:999px;font-weight:800;font-size:13px}
+main{max-width:1180px;margin:auto;padding:22px 14px 50px}.screen{display:none}.screen.active{display:block}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center;background:#ffffffd9;border:2px solid white;border-radius:28px;padding:clamp(20px,4vw,42px);box-shadow:0 14px 35px #7e93c51f}.hero h1{font-size:clamp(30px,5vw,54px);line-height:1.04;margin:8px 0 15px}.hero p{font-size:17px;line-height:1.6}.hero-art{font-size:clamp(90px,15vw,170px);text-align:center;filter:drop-shadow(0 12px 0 #b5c8ed);animation:bob 3s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-10px)}}.eyebrow{font-weight:900;color:#5c70b4;letter-spacing:1.5px;text-transform:uppercase;font-size:12px}.section-title{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:28px 0 14px}.section-title h2{margin:0;font-size:25px}.muted{color:#687694}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{background:#fff;border:2px solid #e6ebfa;border-radius:20px;padding:17px;box-shadow:0 6px 0 #dfe6f7}.card h3{margin:7px 0}.card p{line-height:1.5}.class-card{position:relative;overflow:hidden;min-height:155px}.class-card .emoji{font-size:38px}.class-card .tag{display:inline-block;background:#edf4ff;padding:4px 9px;border-radius:99px;font-size:12px;font-weight:800}.card button{margin-top:8px}.subject-card{display:flex;gap:13px;align-items:center}.subject-icon{font-size:35px;min-width:45px}.subject-card p{margin:4px 0}.progress{height:9px;border-radius:99px;background:#edf0f8;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;background:linear-gradient(90deg,#38c78a,#9be36d);width:0;transition:width .4s}.layout{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}.panel{background:#fff;border:2px solid #e6ebfa;border-radius:22px;padding:20px;box-shadow:0 6px 0 #dfe6f7}.map{position:relative;min-height:390px;border-radius:20px;overflow:hidden;padding:20px;background:linear-gradient(145deg,#c8f4d8,#d9edff 55%,#f9e8b4);border:3px solid #fff}.map:before{content:"";position:absolute;inset:0;background-image:radial-gradient(#fff9 2px,transparent 2px);background-size:25px 25px;pointer-events:none}.map-title{position:relative;font-weight:1000;font-size:22px}.map-nodes{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:25px}.node{background:#ffffffec;color:var(--ink);box-shadow:0 5px 0 #a4c4b1;border:2px solid white;border-radius:17px;padding:12px 6px;text-align:center;min-height:104px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}.node .nicon{font-size:30px}.node small{font-weight:800}.node.locked{filter:grayscale(.6);opacity:.7;background:#e7eaf2}.node.done{border-color:#42c78c;background:#effff6}.node.current{border-color:#ffbc31;box-shadow:0 5px 0 #cf8b16;animation:pulse 1.5s infinite}@keyframes pulse{50%{transform:scale(1.03)}}.avatar{font-size:24px;position:absolute;left:8%;bottom:8%;z-index:2;transition:all .3s}.lesson-title{display:flex;align-items:center;gap:12px}.lesson-title .big{font-size:44px}.lesson-body{font-size:17px;line-height:1.7}.callout{background:#f1f6ff;border-left:5px solid #6591ff;border-radius:12px;padding:13px 15px;margin:14px 0}.animation-box{background:linear-gradient(135deg,#e3f9ff,#fff4c8);border:2px solid #fff;border-radius:20px;min-height:200px;display:grid;place-items:center;text-align:center;padding:20px;position:relative;overflow:hidden}.anim-emoji{font-size:66px;display:inline-block}.anim-emoji.moving{animation:popIn .55s cubic-bezier(.2,.8,.2,1)}@keyframes popIn{0%{transform:scale(.55) rotate(-8deg);opacity:.25}70%{transform:scale(1.12) rotate(3deg)}100%{transform:scale(1);opacity:1}}.animation-box .scene{width:100%;max-width:580px}.scene-stage{display:flex;align-items:center;justify-content:center;gap:clamp(10px,3vw,28px);min-height:90px;flex-wrap:wrap}.scene-object{font-size:clamp(38px,7vw,62px);display:inline-block;animation:objectBounce 1s ease-in-out infinite alternate}.scene-arrow{font-size:28px;font-weight:900;color:#5b75b8;display:inline-block;animation:arrowPulse .7s ease-in-out infinite alternate}@keyframes objectBounce{from{transform:translateY(5px) rotate(-4deg) scale(.96)}to{transform:translateY(-12px) rotate(4deg) scale(1.08)}}@keyframes arrowPulse{from{transform:translateX(-3px);opacity:.55}to{transform:translateX(5px);opacity:1}}.scene-stage>span{transition:opacity .55s,transform .55s}.scene-item{display:inline-flex;flex-direction:column;align-items:center;min-width:78px;max-width:32%;vertical-align:middle;padding:8px 4px;border-radius:16px;transition:background .4s,transform .4s,opacity .4s}.scene-item.active{background:#ffffffd9;box-shadow:0 5px 0 #c8d8f1;transform:translateY(-7px) scale(1.08)!important}.scene-item.done{opacity:.8!important}.scene-item.future{opacity:.25!important;filter:grayscale(.65)}.scene-item.active .scene-object{animation:actionMove .85s ease-in-out infinite alternate}.scene-item.done .scene-object{animation:none;transform:none}.scene-label{transition:background .35s,border-color .35s,transform .35s}.scene-label{font-weight:900;background:#fff;border:2px solid #dce8ff;border-radius:12px;padding:7px 11px;display:inline-block;margin:4px;font-size:clamp(11px,2vw,14px)}@keyframes actionMove{0%{transform:translateY(5px) rotate(-7deg) scale(.92)}55%{transform:translateY(-13px) rotate(5deg) scale(1.15)}100%{transform:translateY(-2px) rotate(0) scale(1.04)}}.scene-item.active .scene-label{animation:labelPop .6s ease-in-out infinite alternate}@keyframes labelPop{from{transform:scale(1)}to{transform:scale(1.04)}}.animation-box.is-playing{background:linear-gradient(135deg,#d8f8ff,#fff2b8,#e4ffec);background-size:200% 200%;animation:sceneGlow 3s ease-in-out infinite alternate}@keyframes sceneGlow{from{background-position:0% 50%}to{background-position:100% 50%}}.scene-stage{min-height:118px}.scene-arrow{transition:opacity .4s}.scene-item.active .scene-object{filter:drop-shadow(0 5px 2px #52688b30)}@media(prefers-reduced-motion:reduce){.scene-item.active .scene-object,.scene-item.active .scene-label,.animation-box.is-playing{animation:none!important}}.scene-step{font-weight:900;color:#5b70ac;font-size:13px}.scene-caption{max-width:520px;margin:8px auto;line-height:1.5}.scene-progress{height:8px;background:#e8edf9;border-radius:99px;overflow:hidden;max-width:400px;margin:12px auto}.scene-progress span{display:block;height:100%;background:#39b982;transition:width .3s}.quiz-visual{display:flex;justify-content:center;align-items:center;gap:12px;min-height:75px;flex-wrap:wrap}.quiz-visual .hint-object{font-size:42px;display:inline-block;animation:objectBounce 1s ease-in-out infinite alternate}.quiz-visual .hint-label{font-size:13px;font-weight:900;background:#fff;border-radius:10px;padding:8px 10px;border:2px solid #dce8ff}
+/* Visual kuis matematika: benda datang, berkumpul, atau berkurang sesuai cerita soal */
+.math-story{width:100%;max-width:620px;margin:0 auto;text-align:center}.math-story-title{font-weight:1000;font-size:clamp(15px,2.5vw,19px);margin:0 0 8px}.math-scene{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:8px;min-height:125px;padding:12px;background:#ffffffb8;border:2px solid #e2ebff;border-radius:18px}.math-group{min-width:0;min-height:92px;border-radius:14px;background:#f5f8ff;padding:8px;display:flex;align-content:center;justify-content:center;align-items:center;gap:2px;flex-wrap:wrap;position:relative}.math-group-label{width:100%;font-size:12px;font-weight:900;color:#4c5e8a}.math-item{font-size:clamp(23px,4vw,35px);display:inline-block;animation:applePop .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--delay,0s)}.math-op{font-size:clamp(22px,4vw,34px);font-weight:1000;color:#5371be}.math-group.incoming .math-item{animation:flyIn .75s cubic-bezier(.15,.8,.25,1) both;animation-delay:var(--delay,0s)}.math-group.result-group{background:#e2fff0;border:2px solid #7cddb0}.math-group.result-group .math-item{animation:resultPop .5s ease-out both;animation-delay:var(--delay,0s)}.math-item.moving-out{animation:flyOut 1.25s ease-in-out both!important;animation-delay:var(--delay,0s)}@keyframes flyOut{0%{opacity:1;transform:translate(0,0) scale(1)}55%{opacity:1;transform:translate(35px,-18px) scale(1.08)}100%{opacity:0;transform:translate(78px,-8px) scale(.45)}}.math-story-caption{font-weight:800;margin:10px 0 5px;min-height:24px}.math-story-controls{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px}.math-story-controls button{font-size:13px;padding:8px 12px}.math-count{font-size:18px;font-weight:1000;color:#206c4b;margin-top:5px}@keyframes applePop{0%{opacity:0;transform:scale(.2) rotate(-35deg)}75%{opacity:1;transform:scale(1.18) rotate(8deg)}100%{opacity:1;transform:scale(1) rotate(0)}}@keyframes flyIn{0%{opacity:0;transform:translate(35px,-22px) scale(.3)}65%{opacity:1;transform:translate(-5px,3px) scale(1.15)}100%{opacity:1;transform:translate(0,0) scale(1)}}@keyframes resultPop{0%{transform:scale(.65);background:#fff2ad}70%{transform:scale(1.1)}100%{transform:scale(1)}}@media(max-width:480px){.math-scene{gap:3px;padding:5px}.math-group{padding:5px 2px;min-height:90px}.math-item{font-size:22px}.math-op{font-size:20px}.math-group-label{font-size:10px}}.quiz-option{display:block;width:100%;text-align:left;background:#f5f7ff;color:#27395d;box-shadow:none;border:2px solid #dfe6fa;margin:9px 0;padding:13px 15px}.quiz-option:hover{background:#e9efff}.quiz-option.correct{background:#d9ffeb;border-color:#35b980}.quiz-option.wrong{background:#ffe4e8;border-color:#f27a8e}.feedback{border-radius:14px;padding:13px;margin:12px 0;font-weight:700}.feedback.good{background:#dfffee;color:#126b49}.feedback.bad{background:#fff0d8;color:#7c4a00}.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.kbd{display:inline-block;background:#fff;border:1px solid #d7def0;border-radius:7px;padding:2px 7px;font-size:12px}.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tiny{font-size:12px}.badge-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.badge-item{background:#f6f7ff;border-radius:12px;padding:10px;text-align:center}.badge-item b{display:block;font-size:24px}.hidden{display:none!important}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:30;background:#263552;color:white;border-radius:14px;padding:12px 18px;box-shadow:0 10px 30px #1c2c4c44;max-width:90vw;text-align:center}.footer{text-align:center;color:#75809a;padding:24px 8px;font-size:13px}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.hero-art{grid-row:1;font-size:90px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.layout{grid-template-columns:1fr}.map-nodes{gap:10px}.node{font-size:13px}.hero h1{font-size:38px}}
+@media(max-width:520px){header{position:static}.grid{grid-template-columns:1fr}.map-nodes{grid-template-columns:repeat(2,1fr)}.map{padding:13px}.panel{padding:15px}.stats{width:100%}.brand{width:100%}.lesson-body{font-size:15px}}
+
+/* Tokoh pemandu kuis: ilustrasi anak sekolah yang benar-benar bergerak */
+.quiz-mascot-row{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 auto 12px;max-width:540px;min-height:120px}
+.quiz-mascot{width:112px;min-width:90px;height:132px;overflow:visible;filter:drop-shadow(0 5px 3px #52688b22);animation:mascotFloat 2.4s ease-in-out infinite}
+.quiz-mascot .wave-arm{transform-box:fill-box;transform-origin:18% 20%;animation:mascotWave .8s ease-in-out infinite alternate}
+.quiz-mascot .blink{animation:mascotBlink 4s infinite;transform-origin:center}
+.quiz-mascot-bubble{position:relative;background:#fff;border:2px solid #cfe1ff;border-radius:18px;padding:12px 15px;font-weight:900;line-height:1.4;max-width:300px;box-shadow:0 4px 0 #d9e7ff;text-align:left}
+.quiz-mascot-bubble:before{content:"";position:absolute;left:-9px;top:25px;width:14px;height:14px;background:#fff;border-left:2px solid #cfe1ff;border-bottom:2px solid #cfe1ff;transform:rotate(45deg)}
+.quiz-mascot-bubble small{display:block;font-weight:600;color:#637396;margin-top:4px}
+@keyframes mascotFloat{0%,100%{transform:translateY(2px) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes mascotWave{from{transform:rotate(-14deg)}to{transform:rotate(25deg)}}
+@keyframes mascotBlink{0%,44%,48%,100%{transform:scaleY(1)}46%{transform:scaleY(.1)}}
+@media(max-width:480px){.quiz-mascot-row{gap:7px}.quiz-mascot{width:82px;min-width:75px;height:110px}.quiz-mascot-bubble{font-size:13px;padding:9px 11px}}
+
+.question-card{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;background:#fff;border:2px solid #d8e7ff;border-radius:16px;padding:12px 16px;margin:6px auto;max-width:100%;font-size:1.05rem}.question-card .hint-object{font-size:2rem}.question-scene{min-height:105px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.punctuation-blank{display:inline-block;background:#fff3c7;border:2px dashed #e9ad35;border-radius:8px;padding:2px 7px;animation:hintPulse 1.8s ease-in-out infinite}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">🧭</div><div>Petualangan Cerdas <span style="color:#6380dc">SD 1–6</span></div></div>
+ <div class="stats"><span class="pill">⭐ <span id="statStars">0</span> Bintang</span><span class="pill">🪙 <span id="statCoins">0</span> Koin</span><span class="pill">🏅 <span id="statBadges">0</span> Lencana</span><button class="secondary" id="soundBtn" title="Aktif/nonaktifkan suara">🔊 Suara: ON</button></div>
+</header>
+<main>
+<section id="home" class="screen active">
+ <div class="hero"><div><div class="eyebrow">Belajar • Bermain • Bertualang</div><h1>Jadilah penjelajah ilmu! 🚀</h1><p>Jelajahi dunia pelajaran, temui teman baru, ikuti animasi yang bergerak, selesaikan misi, dan kumpulkan bintang. Setiap jawaban membuatmu semakin hebat!</p><div class="controls"><button onclick="showScreen('classes')">🎮 Mulai Petualangan</button><button class="secondary" onclick="showHelp()">📖 Cara Bermain</button></div><p class="tiny muted">Progres tersimpan otomatis di browser perangkat ini.</p></div><div class="hero-art">🧑‍🚀🌈</div></div>
+ <div class="section-title"><div><div class="eyebrow">Pilih petualanganmu</div><h2>Enam tingkat kelas</h2></div><span class="muted">Materi bertahap untuk SD</span></div><div id="homeClasses" class="grid"></div>
+</section>
+<section id="classes" class="screen">
+ <div class="section-title"><div><div class="eyebrow">Langkah 1</div><h2>Pilih kelasmu</h2><p class="muted">Pilih kelas yang sedang kamu pelajari.</p></div><button class="secondary" onclick="showScreen('home')">← Beranda</button></div><div id="classGrid" class="grid"></div>
+</section>
+<section id="subjects" class="screen">
+ <div class="section-title"><div><div class="eyebrow">Langkah 2</div><h2 id="subjectHeading">Pilih mata pelajaran</h2><p class="muted">Setiap dunia punya beberapa bab. Selesaikan bab untuk membuka jalan berikutnya.</p></div><button class="secondary" onclick="showScreen('classes')">← Ganti kelas</button></div><div id="subjectGrid" class="grid"></div>
+</section>
+<section id="mapScreen" class="screen">
+ <div class="section-title"><div><div class="eyebrow">Langkah 3</div><h2 id="mapHeading">Peta petualangan</h2><p class="muted">Bab terkunci akan terbuka setelah bab sebelumnya tuntas.</p></div><button class="secondary" onclick="showScreen('subjects')">← Mata pelajaran</button></div>
+ <div class="layout"><div class="map"><div class="map-title" id="mapTitle">🗺️ Dunia Pengetahuan</div><div class="map-nodes" id="mapNodes"></div><div class="avatar" id="mapAvatar">🧑‍🚀</div></div><aside class="panel"><h3>🎒 Ransel Penjelajah</h3><p class="muted">Terus belajar untuk mengumpulkan hadiah.</p><div class="badge-grid"><div class="badge-item"><b>⭐ <span id="sideStars">0</span></b><span class="tiny">Bintang</span></div><div class="badge-item"><b>🪙 <span id="sideCoins">0</span></b><span class="tiny">Koin</span></div></div><h3>🎯 Misi dunia</h3><p id="worldMission">Selesaikan bab pertama.</p><div class="progress"><span id="subjectProgress"></span></div><p class="tiny muted" id="progressText">0 dari 0 bab selesai</p><button class="green" style="width:100%" onclick="startNextChapter()">▶ Lanjutkan bab</button><button class="secondary" style="width:100%;margin-top:10px" onclick="showScreen('subjects')">Pilih dunia lain</button></aside></div>
+</section>
+<section id="lesson" class="screen">
+ <div class="section-title"><div><div class="eyebrow" id="lessonEyebrow">Bab pembelajaran</div><h2 id="lessonHeading">Judul bab</h2></div><button class="secondary" onclick="backToMap()">✕ Keluar ke peta</button></div>
+ <div class="layout"><div class="panel"><div class="lesson-title"><span class="big" id="lessonIcon">📚</span><div><h2 id="lessonTitle" style="margin:0">Materi</h2><p class="muted" id="lessonObjective" style="margin:4px 0"></p></div></div>
+ <div class="callout"><b>🎯 Hari ini kita belajar</b><div id="objectiveText"></div><button class="secondary" style="margin-top:10px" onclick="speakCurrentLesson()">🔊 Dengarkan penjelasan</button></div><div class="lesson-body" id="lessonText"></div><div class="callout"><b>🌟 Ayo lihat contohnya</b><div id="lessonExample"></div></div>
+ <h3>🎬 Animasi pembelajaran</h3><div class="animation-box"><div class="scene"><div id="animStep" class="scene-step">ANIMASI LANGKAH 1 DARI 3</div><div id="animScene" class="scene-stage"><span class="scene-object">👀</span><span class="scene-arrow">→</span><span class="scene-object">💡</span></div><h3 id="animTitle">Ayo amati!</h3><p id="animCaption" class="scene-caption">Ikuti langkahnya untuk memahami materi.</p><div class="scene-progress"><span id="animProgress" style="width:0%"></span></div><div class="controls" style="justify-content:center"><button class="gold" id="animPlayBtn" onclick="toggleAnimation()">▶ Mulai animasi</button><button class="secondary" id="animNextBtn" onclick="nextAnimationStep()" disabled>Langkah berikutnya →</button><button class="secondary" onclick="replayLesson()">↻ Ulang dari awal</button></div></div></div>
+ <div class="controls"><button onclick="beginPractice()">✏️ Mulai latihan</button><button class="green" onclick="beginFinalQuiz()">🏆 Mulai kuis akhir</button><button class="secondary" onclick="showScreen('mapScreen')">🗺️ Kembali ke peta</button></div></div>
+ <aside class="panel"><h3>📌 Langkah belajar</h3><div id="lessonSteps">① Baca materi<br>② Tonton animasi<br>③ Latihan<br>④ Kuis akhir</div><div class="progress"><span id="lessonProgress"></span></div><p class="tiny muted">Selesaikan latihan dan kuis untuk membuka bab selanjutnya.</p><hr style="border:0;border-top:1px solid #e7ebf5;margin:18px 0"><h3>🧑‍🚀 Temanmu berkata</h3><p id="buddyTip">“Kamu pasti bisa! Baca pelan-pelan, ya.”</p></aside></div>
+</section>
+<section id="quiz" class="screen">
+ <div class="section-title"><div><div class="eyebrow" id="quizEyebrow">Tantangan ilmu</div><h2 id="quizHeading">Kuis bab</h2></div><button class="secondary" onclick="backToLesson()">← Kembali ke materi</button></div>
+ <div class="layout"><div class="panel"><div class="bar"><span class="pill" id="quizMode">Latihan</span><span class="pill">Soal <span id="qNum">1</span>/<span id="qTotal">5</span></span><span class="pill">Poin: <span id="roundScore">0</span></span></div><div class="progress"><span id="quizProgress"></span></div><h2 id="questionText">Pertanyaan muncul di sini</h2><button class="secondary" style="margin-bottom:12px" onclick="speakQuestion()">🔊 Bacakan soal</button><div id="questionVisual" class="animation-box hidden"></div><div id="options"></div><div id="feedback" class="feedback hidden"></div><div class="controls"><button id="submitAnswer" onclick="checkAnswer()">Periksa jawaban</button><button id="nextQuestion" class="green hidden" onclick="nextQuestion()">Soal berikutnya →</button></div></div><aside class="panel"><h3>💡 Tips</h3><p id="quizTip">Pilih jawaban yang paling tepat.</p><div class="callout">Tidak apa-apa jika salah. Baca pembahasannya, lalu coba lagi. Belajar adalah petualangan!</div><h3>🏆 Hadiah bab</h3><p>⭐ Bintang sesuai nilai kuis</p><p>🪙 Koin untuk jawaban benar</p><p>🔓 Bab berikutnya terbuka jika nilai minimal 60%.</p></aside></div>
+</section>
+<section id="result" class="screen">
+ <div class="hero" style="grid-template-columns:1fr .5fr"><div><div class="eyebrow">Hasil petualangan</div><h1 id="resultTitle">Hebat!</h1><p id="resultMessage">Kamu menyelesaikan tantangan.</p><div class="stats"><span class="pill">🎯 Nilai <b id="resultScore">0%</b></span><span class="pill">⭐ <b id="resultStars">0</b></span><span class="pill">🪙 <b id="resultCoins">0</b></span></div><div class="controls"><button onclick="continueAfterResult()">🗺️ Kembali ke peta</button><button class="secondary" onclick="retryQuiz()">🔄 Coba kuis lagi</button></div></div><div class="hero-art" id="resultArt">🏆</div></div><div class="panel" style="margin-top:18px"><h3>📚 Pembahasan</h3><div id="reviewList"></div></div>
+</section>
+<section id="help" class="screen">
+ <div class="panel"><div class="section-title"><div><div class="eyebrow">Panduan penjelajah</div><h2>🎮 Cara bermain</h2></div><button class="secondary" onclick="showScreen('home')">← Beranda</button></div><ol class="lesson-body"><li>Pilih kelas dan mata pelajaran.</li><li>Pilih bab yang tidak terkunci. Baca materi dan contoh.</li><li>Tekan <b>Putar animasi</b> untuk melihat setiap tahap bergerak; gunakan <b>Langkah berikutnya</b> jika ingin belajar perlahan.</li><li>Kerjakan latihan, lalu selesaikan kuis akhir.</li><li>Nilai minimal 60% membuka bab berikutnya. Jika belum berhasil, pelajari lagi dan coba kuis baru.</li><li>Kumpulkan bintang, koin, dan lencana. Progres disimpan di browser yang sama.</li></ol><div class="callout">Kontrol karakter di peta: gunakan tombol panah atau WASD pada keyboard. Di perangkat sentuh, tombol arah juga tersedia. Pergerakan karakter bersifat eksplorasi; materi dan kuis dibuka melalui lokasi bab.</div><div class="controls"><button onclick="showScreen('classes')">Ayo mulai!</button><button class="pink" onclick="resetProgress()">Hapus progres lokal</button></div></div>
+</section>
+<div class="footer">Petualangan Cerdas • Media belajar interaktif • Materi contoh untuk pendampingan belajar</div>
+</main><div id="toast" class="toast hidden"></div>
+<script>
+const SUBJECTS = [
+ {id:"indo",name:"Bahasa Indonesia",icon:"📚",color:"#ff8fa3",topics:["Huruf dan bunyi","Menyusun kata","Kalimat sederhana","Membaca cerita","Ide pokok","Menulis ringkasan"]},
+ {id:"math",name:"Matematika",icon:"🔢",color:"#ffd65a",topics:["Berhitung dan bilangan","Penjumlahan dan pengurangan","Perkalian dan pembagian","Pecahan sederhana","Bangun datar dan ruang","Pengukuran dan data"]},
+ {id:"pancasila",name:"Pendidikan Pancasila",icon:"🇮🇩",color:"#ff9e72",topics:["Aturan di rumah dan sekolah","Saling menghargai","Simbol Pancasila","Hak dan kewajiban","Musyawarah dan gotong royong","Persatuan dalam keberagaman"]},
+ {id:"ipas",name:"IPAS",icon:"🌱",color:"#63d3a0",topics:["Tubuh dan pancaindra","Hewan dan tumbuhan","Cuaca dan lingkungan","Gaya dan energi","Siklus air dan ekosistem","Tata surya dan bumi"]},
+ {id:"pjok",name:"PJOK",icon:"⚽",color:"#76b7ff",topics:["Gerak dasar","Kebugaran tubuh","Permainan dan kerja sama","Menjaga kebersihan diri","Keselamatan saat bergerak","Gaya hidup sehat"]},
+ {id:"seni",name:"Seni Budaya",icon:"🎨",color:"#ba9bff",topics:["Warna dan bentuk","Irama dan bunyi","Garis dan pola","Membuat karya dari bahan sekitar","Apresiasi karya seni","Kreasi dan pertunjukan"]},
+ {id:"english",name:"Bahasa Inggris",icon:"🔤",color:"#8bd9ee",topics:["Greetings and names","Numbers and colors","Things around us","Family and animals","Daily activities","Simple sentences"]},
+ {id:"agama",name:"Pendidikan Agama",icon:"🕊️",color:"#b8c7a5",topics:["Berbuat baik","Jujur dan bertanggung jawab","Menghormati keluarga","Peduli sesama","Syukur dan disiplin","Hidup damai"]},
+ {id:"lokal",name:"Muatan Lokal",icon:"🏝️",color:"#ffc1a6",topics:["Mengenal lingkungan sekitar","Budaya dan tradisi lokal","Bahasa daerah","Makanan dan kerajinan lokal","Menjaga alam setempat","Warisan budaya"]},
+];
+const CLASS_NAMES=["Kelas 1 SD","Kelas 2 SD","Kelas 3 SD","Kelas 4 SD","Kelas 5 SD","Kelas 6 SD"];
+const CLASS_EMOJI=["🐣","🐿️","🦊","🦁","🐉","🦅"];
+const BASE_LESSONS = {
+ math:[
+ {title:"Berhitung dan bilangan",objective:"Menghitung benda dan mengenali bilangan sesuai tingkat kelas.",text:"Bilangan digunakan untuk menyatakan banyak benda, urutan, dan ukuran. Mulailah dengan menghitung satu per satu. Pada kelas lebih tinggi, bilangan dapat ditulis dalam nilai tempat satuan, puluhan, ratusan, hingga ribuan. Perhatikan angka dan kelompok bendanya sebelum menjawab.",example:"Hitung 4 pensil lalu tambahkan 2 pensil. Sekarang ada 6 pensil. Untuk kelas tinggi, 246 terdiri dari 2 ratusan, 4 puluhan, dan 6 satuan.",anim:"🍎",animTitle:"Apel di pohon",animCaption:"Ada lima apel. Satu apel jatuh. Hitung apel yang tersisa.",questions:[
+ ["Di keranjang ada 3 apel lalu ditambah 2 apel. Berapa jumlahnya?",["4","5","6","7"],1,"3 + 2 = 5. Menghitung benda membantu kita memahami penjumlahan."],
+ ["Bilangan setelah 9 adalah ...",["8","10","11","7"],1,"Urutan bilangan setelah 9 adalah 10."],
+ ["Ada 8 balon, 3 terbang. Berapa yang tersisa?",["4","5","6","11"],1,"8 − 3 = 5 balon."],
+ ["Angka 4 pada bilangan 246 menempati nilai ...",["Ratusan","Puluhan","Satuan","Ribuan"],1,"Pada 246, angka 4 berada di tempat puluhan."],
+ ["Setengah dari 10 benda adalah ...",["2","4","5","8"],2,"Setengah berarti membagi menjadi dua bagian sama banyak: 10 ÷ 2 = 5."]
+ ]}] ,
+ indo:[
+ {title:"Huruf, kata, dan kalimat",objective:"Mengenali huruf, membentuk kata, dan memahami kalimat sesuai tingkat kelas.",text:"Bahasa membantu kita menyampaikan pikiran dan perasaan. Huruf disusun menjadi suku kata, suku kata menjadi kata, lalu kata disusun menjadi kalimat. Kalimat yang baik memiliki makna jelas. Saat membaca cerita, cari tokoh, tempat, peristiwa, dan pesan cerita.",example:"Huruf b-a-l-a membentuk kata “bala”, sedangkan b-o-l-a membentuk kata “bola”. Kalimat: “Budi bermain bola di halaman.”",anim:"🔤",animTitle:"Huruf menjadi kata",animCaption:"Susun huruf menjadi kata yang bermakna.",questions:[
+ ["Huruf awal kata “buku” adalah ...",["a","b","k","u"],1,"Kata buku dimulai dengan huruf b."],
+ ["Manakah yang merupakan kalimat lengkap?",["Di halaman","Siti membaca buku.","Karena hujan","Merah dan biru"],1,"“Siti membaca buku.” menyampaikan pikiran yang lengkap."],
+ ["Lawan kata “besar” adalah ...",["tinggi","kecil","panjang","lebar"],1,"Lawan kata besar adalah kecil."],
+ ["Tokoh dalam cerita adalah ...",["Pelaku cerita","Judul buku","Tempat mencetak","Warna sampul"],0,"Tokoh adalah orang atau makhluk yang mengalami peristiwa dalam cerita."],
+ ["Ide pokok paragraf berisi ...",["Gagasan utama","Semua tanda baca","Nama penerbit","Jumlah huruf"],0,"Ide pokok adalah gagasan utama yang dibahas dalam paragraf."]
+ ]}],
+ pancasila:[
+ {title:"Hidup rukun dan nilai Pancasila",objective:"Mempraktikkan sikap baik, aturan, dan nilai Pancasila di rumah maupun sekolah.",text:"Kita hidup bersama orang yang memiliki kebiasaan dan pendapat berbeda. Sikap saling menghormati, jujur, adil, mau membantu, dan berdiskusi membuat lingkungan aman. Pancasila menjadi dasar negara Indonesia dan mengajarkan nilai ketuhanan, kemanusiaan, persatuan, musyawarah, serta keadilan.",example:"Saat teman berbeda pendapat, dengarkan dengan sopan. Jika kelas memilih permainan, bermusyawarahlah dan terima hasilnya bersama.",anim:"🤝",animTitle:"Teman saling membantu",animCaption:"Pilih tindakan yang membuat semua teman merasa dihargai.",questions:[
+ ["Ketika teman berbicara, kita sebaiknya ...",["Mengejek","Mendengarkan","Pergi begitu saja","Berteriak"],1,"Mendengarkan adalah bentuk menghargai orang lain."],
+ ["Kerja bakti membersihkan kelas menunjukkan sikap ...",["Gotong royong","Egois","Boros","Malas"],0,"Gotong royong berarti bekerja bersama untuk kepentingan bersama."],
+ ["Keputusan bersama sebaiknya diambil melalui ...",["Pertengkaran","Paksaan","Musyawarah","Undian diam-diam"],2,"Musyawarah memberi kesempatan untuk menyampaikan pendapat."],
+ ["Lambang negara Indonesia adalah ...",["Garuda Pancasila","Harimau","Komodo","Merak"],0,"Garuda Pancasila adalah lambang negara Indonesia."],
+ ["Bersikap adil berarti ...",["Selalu menang sendiri","Memperlakukan orang dengan wajar","Memilih teman tertentu saja","Mengabaikan aturan"],1,"Adil berarti memberi perlakuan dan hak secara wajar."]
+ ]}],
+ ipas:[
+ {title:"Makhluk hidup dan lingkungan",objective:"Mengamati ciri makhluk hidup serta hubungan dengan lingkungan.",text:"Makhluk hidup seperti manusia, hewan, dan tumbuhan membutuhkan air, udara, dan sumber energi. Banyak makhluk hidup tumbuh, bernapas, dan berkembang biak. Lingkungan terdiri atas unsur hidup dan tak hidup yang saling berhubungan. Menjaga kebersihan air, tanah, dan udara membantu makhluk hidup bertahan.",example:"Tanaman di pot tumbuh lebih baik jika mendapat air, cahaya matahari, dan tanah yang sesuai. Sampah sebaiknya dibuang pada tempatnya.",anim:"🌱",animTitle:"Benih tumbuh",animCaption:"Benih mendapat air dan cahaya, lalu tumbuh menjadi tanaman.",questions:[
+ ["Tumbuhan umumnya membutuhkan ...",["Air dan cahaya","Plastik","Asap","Batu bara saja"],0,"Air dan cahaya membantu banyak tumbuhan tumbuh."],
+ ["Hewan yang berkembang biak dengan bertelur adalah ...",["Ayam","Kucing","Sapi","Kambing"],0,"Ayam berkembang biak dengan bertelur."],
+ ["Perubahan air menjadi uap karena panas disebut ...",["Membeku","Menguap","Mengembun","Mencair"],1,"Panas dapat mengubah air cair menjadi uap melalui penguapan."],
+ ["Sumber energi utama bagi bumi adalah ...",["Bulan","Matahari","Awan","Pasir"],1,"Matahari memberikan cahaya dan panas bagi bumi."],
+ ["Hubungan makhluk hidup dengan lingkungannya dipelajari dalam ...",["Ekosistem","Kaligrafi","Geometri saja","Tata bahasa"],0,"Ekosistem mencakup hubungan makhluk hidup dengan lingkungan."]
+ ]}],
+ pjok:[
+ {title:"Gerak aktif dan hidup sehat",objective:"Mengenali gerak dasar dan kebiasaan menjaga kesehatan.",text:"Tubuh perlu bergerak secara teratur agar kuat dan bugar. Berjalan, berlari, melompat, melempar, dan menangkap adalah contoh gerak dasar. Lakukan pemanasan sebelum olahraga dan pendinginan setelahnya. Minum air, makan beragam makanan bergizi, tidur cukup, dan menjaga kebersihan juga penting.",example:"Sebelum bermain bola, gerakkan tangan dan kaki perlahan untuk pemanasan. Setelah bermain, minum air dan istirahat.",anim:"⚽",animTitle:"Gerak dan pemanasan",animCaption:"Mulai dengan peregangan ringan sebelum berolahraga.",questions:[
+ ["Sebelum olahraga kita melakukan ...",["Pemanasan","Langsung tidur","Makan berlebihan","Menahan napas"],0,"Pemanasan membantu tubuh bersiap bergerak."],
+ ["Agar tubuh tetap sehat, kita perlu ...",["Tidak pernah bergerak","Olahraga dan istirahat cukup","Tidur larut setiap hari","Menghindari air"],1,"Gerak, istirahat, dan kebiasaan sehat saling melengkapi."],
+ ["Saat haus setelah berlari, sebaiknya ...",["Minum air","Tidak minum sama sekali","Berlari lebih cepat","Menahan haus"],0,"Air membantu mengganti cairan tubuh."],
+ ["Permainan beregu mengajarkan ...",["Kerja sama","Curang","Mengejek","Menghindari teman"],0,"Kerja sama membantu tim mencapai tujuan bersama."],
+ ["Kebersihan tangan dijaga dengan ...",["Mencuci tangan","Mengusap baju saja","Meniup jari","Menyentuh semua benda"],0,"Cuci tangan dengan sabun dan air mengalir."]
+ ]}],
+ seni:[
+ {title:"Warna, bentuk, dan irama",objective:"Mengenal unsur seni dan menggunakannya untuk membuat karya sederhana.",text:"Seni dapat dibuat melalui gambar, musik, gerak, dan karya. Garis, bentuk, warna, tekstur, serta irama adalah unsur yang dapat kita amati. Warna primer yang umum diajarkan adalah merah, kuning, dan biru. Karya seni dapat mengekspresikan ide dan perasaan dengan cara yang berbeda.",example:"Gunakan bentuk lingkaran dan segitiga untuk menggambar rumah. Tepuk tangan mengikuti pola pelan-pelan untuk mengenal irama.",anim:"🎨",animTitle:"Karya warna-warni",animCaption:"Amati bentuk dan warna di sekitar kita.",questions:[
+ ["Warna primer yang umum dikenalkan adalah ...",["Merah, kuning, biru","Hitam, putih, abu","Hijau, ungu, jingga","Cokelat, emas, perak"],0,"Merah, kuning, dan biru sering digunakan sebagai warna primer dalam pembelajaran dasar."],
+ ["Bentuk roda biasanya menyerupai ...",["Lingkaran","Segitiga","Persegi panjang","Bintang"],0,"Roda umumnya berbentuk lingkaran."],
+ ["Pola bunyi yang teratur disebut ...",["Irama","Bayangan","Tekstur","Ukuran"],0,"Irama adalah susunan bunyi atau ketukan yang teratur."],
+ ["Alat untuk mewarnai gambar adalah ...",["Krayon","Penggaris saja","Penghapus papan","Sendok"],0,"Krayon dapat digunakan untuk mewarnai gambar."],
+ ["Karya seni dapat menyampaikan ...",["Ide dan perasaan","Hanya angka","Cuaca saja","Aturan matematika saja"],0,"Seni merupakan salah satu cara mengekspresikan ide dan perasaan."]
+ ]}],
+ english:[
+ {title:"Greetings and everyday words",objective:"Mengenali sapaan dan kosakata bahasa Inggris sederhana.",text:"Bahasa Inggris digunakan untuk berkomunikasi dengan orang dari berbagai tempat. “Hello” berarti halo, “Good morning” berarti selamat pagi, “Thank you” berarti terima kasih, dan “Please” berarti tolong atau silakan sesuai konteks. Ucapkan dengan sopan dan dengarkan lawan bicara.",example:"Saat bertemu guru pada pagi hari, kamu dapat berkata, “Good morning, Teacher!” Ketika menerima bantuan, ucapkan “Thank you.”",anim:"👋",animTitle:"Say hello!",animCaption:"Ayo berlatih menyapa teman dengan ramah.",questions:[
+ ["Arti “Hello” adalah ...",["Halo","Selamat malam","Sampai jumpa","Maaf"],0,"Hello berarti halo."],
+ ["“Thank you” digunakan untuk mengucapkan ...",["Terima kasih","Selamat pagi","Selamat tinggal","Nama saya"],0,"Thank you berarti terima kasih."],
+ ["Bahasa Inggris untuk warna merah adalah ...",["Blue","Green","Red","Yellow"],2,"Red berarti merah."],
+ ["“Good morning” berarti ...",["Selamat pagi","Selamat malam","Sampai besok","Terima kasih"],0,"Good morning adalah sapaan pada pagi hari."],
+ ["Jika ditanya “What is your name?”, kita menyebutkan ...",["Nama","Umur bumi","Warna langit","Jumlah meja"],0,"Pertanyaan itu menanyakan nama seseorang."]
+ ]}],
+ agama:[
+ {title:"Berbuat baik dan bersyukur",objective:"Mengenali perilaku jujur, peduli, disiplin, dan menghormati orang lain.",text:"Berbagai ajaran agama mengajarkan kebaikan, kejujuran, rasa syukur, kepedulian, dan hidup damai. Kita dapat menerapkan nilai-nilai tersebut dengan menolong orang lain, menjaga ucapan, menghormati keluarga, serta bertanggung jawab atas tindakan. Pelajari praktik keagamaan sesuai ajaran dan bimbingan guru atau keluarga.",example:"Mengembalikan barang yang ditemukan kepada pemiliknya adalah contoh kejujuran. Mengucapkan terima kasih menunjukkan rasa syukur.",anim:"💛",animTitle:"Kebaikan setiap hari",animCaption:"Perbuatan baik sederhana bisa membuat orang lain merasa terbantu.",questions:[
+ ["Jika menemukan barang milik teman, kita sebaiknya ...",["Mengembalikan kepada pemilik","Menyembunyikannya","Membuangnya","Mengaku sebagai milik sendiri"],0,"Mengembalikan barang menunjukkan kejujuran."],
+ ["Membantu teman yang kesulitan menunjukkan ...",["Kepedulian","Kesombongan","Kecurangan","Kemalasan"],0,"Peduli berarti memperhatikan dan membantu sesama."],
+ ["Kita menghormati keluarga dengan cara ...",["Berbicara sopan","Selalu membentak","Mengabaikan semua tugas","Mengejek"],0,"Berbicara sopan merupakan bentuk hormat."],
+ ["Bertanggung jawab berarti ...",["Melaksanakan kewajiban","Menyalahkan orang lain","Menyembunyikan kesalahan","Menghindari tugas"],0,"Tanggung jawab berarti menjalankan tugas dan berani memperbaiki kesalahan."],
+ ["Ketika berbuat salah, sebaiknya ...",["Mengakui dan memperbaiki","Berbohong","Menyalahkan teman","Mengulangi dengan sengaja"],0,"Mengakui kesalahan membantu kita belajar dan memperbaikinya."]
+ ]}],
+ lokal:[
+ {title:"Mengenal budaya dan lingkungan lokal",objective:"Menghargai budaya setempat dan menjaga lingkungan sekitar.",text:"Setiap daerah memiliki bahasa, makanan, kesenian, pakaian, permainan, dan tradisi yang beragam. Kita dapat mempelajari budaya lokal dari keluarga, masyarakat, buku, dan guru. Menghargai budaya sendiri juga perlu disertai sikap hormat terhadap budaya daerah lain. Jaga tempat tinggal dan alam agar tetap lestari.",example:"Cari tahu nama permainan tradisional dari daerahmu, tanyakan maknanya kepada keluarga, lalu ceritakan dengan sopan kepada teman.",anim:"🏝️",animTitle:"Jelajah budaya",animCaption:"Setiap daerah punya cerita dan tradisi yang berharga.",questions:[
+ ["Sikap yang baik terhadap budaya daerah lain adalah ...",["Menghargai","Mengejek","Melarang tanpa alasan","Mengabaikan"],0,"Menghargai keberagaman membuat kita hidup rukun."],
+ ["Contoh menjaga lingkungan adalah ...",["Membuang sampah pada tempatnya","Mencemari sungai","Merusak tanaman","Membakar sampah sembarangan"],0,"Buang sampah pada tempatnya dan kurangi sampah."],
+ ["Budaya lokal dapat dipelajari dari ...",["Keluarga dan masyarakat","Rumor saja","Menebak-nebak","Mengejek tradisi"],0,"Keluarga, masyarakat, dan guru dapat menjadi sumber pengetahuan budaya."],
+ ["Bahasa daerah merupakan bagian dari ...",["Warisan budaya","Alat olahraga","Cuaca","Benda langit"],0,"Bahasa daerah adalah salah satu unsur warisan budaya."],
+ ["Jika ada tradisi yang belum kita pahami, sebaiknya ...",["Bertanya dengan sopan","Langsung mengejek","Menyebarkan kabar palsu","Merusak perlengkapannya"],0,"Bertanya dengan sopan membantu kita memahami tradisi."]
+ ]}]
+};
+function gradeLevelQuestions(subjectId, grade){
+ const tier = grade<=2 ? 0 : grade<=4 ? 1 : 2;
+ const bank = {
+ math:[
+  [["Ada 4 jeruk. Ibu memberi 2 lagi. Berapa semuanya?",["5","6","7","8"],1,"Hitung empat jeruk, lalu tambah dua: jumlahnya enam."],["Manakah angka yang datang setelah 12?",["11","13","14","10"],1,"Urutan bilangan setelah 12 adalah 13."],["Ada 7 ikan, 2 berenang menjauh. Berapa yang tersisa?",["4","5","6","9"],1,"Kurangi dua dari tujuh: tersisa lima ikan."]],
+  [["Rina punya 36 stiker dan mendapat 27 lagi. Berapa stiker Rina sekarang?",["53","63","62","73"],1,"36 + 27 = 63 stiker."],["Ada 8 kantong berisi 6 kelereng setiap kantong. Berapa kelereng seluruhnya?",["14","42","48","56"],2,"Delapan kelompok yang masing-masing berisi enam berarti 8 × 6 = 48."],["Sebanyak 45 kue dibagi rata kepada 5 anak. Setiap anak mendapat ...",["8","9","10","15"],1,"45 ÷ 5 = 9 kue untuk setiap anak."]],
+  [["Sebuah tas berharga Rp80.000 mendapat diskon 25%. Berapa harga setelah diskon?",["Rp20.000","Rp55.000","Rp60.000","Rp75.000"],2,"25% dari Rp80.000 adalah Rp20.000, jadi harga akhirnya Rp60.000."],["Perbandingan siswa laki-laki dan perempuan adalah 3:5. Jika jumlahnya 32 siswa, berapa siswa perempuan?",["12","16","20","24"],2,"Total bagian 3 + 5 = 8; tiap bagian 32 ÷ 8 = 4, jadi perempuan 5 × 4 = 20."],["Rata-rata nilai 70, 80, 90, dan 80 adalah ...",["75","80","82,5","85"],1,"Jumlah nilai 320 dibagi 4 siswa menghasilkan rata-rata 80."]]
+ ],
+ indo:[
+  [["Kalimat yang tepat untuk meminta tolong adalah ...",["Ambilkan buku itu, sekarang!","Tolong ambilkan buku, ya.","Kamu harus tahu sendiri.","Pergi sana."],1,"Kata 'tolong' membuat permintaan terdengar sopan."],["Lawan kata 'panjang' adalah ...",["Lebar","Tinggi","Pendek","Besar"],2,"Kata yang berlawanan dengan panjang adalah pendek."],["Kalimat 'Beni menyiram tanaman' menceritakan kegiatan ...",["Menyiram tanaman","Membeli buku","Memasak nasi","Bermain bola"],0,"Kegiatan yang disebutkan langsung pada kalimat adalah menyiram tanaman."]],
+  [["Bacalah: 'Hujan turun sejak pagi. Jalan menjadi basah dan beberapa orang memakai payung.' Gagasan utama paragraf itu adalah ...",["Orang membeli payung","Hujan turun sejak pagi dan memengaruhi keadaan sekitar","Jalan selalu kering","Pagi hari sangat panas"],1,"Kalimat-kalimat membahas hujan dan akibatnya pada keadaan sekitar."],["Kata hubung yang tepat: 'Dina belajar ... mendapat nilai baik.'",["tetapi","agar","karena itu","meskipun"],1,"'Agar' menyatakan tujuan: Dina belajar dengan tujuan mendapat nilai baik."],["Ringkasan yang baik seharusnya ...",["Memuat semua kata tanpa dipilih","Memuat inti informasi secara singkat","Menambahkan kejadian baru","Hanya menyalin judul"],1,"Ringkasan mempertahankan informasi utama dengan lebih singkat."]],
+  [["Bacalah: 'Perpustakaan sekolah menyediakan buku cerita, ensiklopedia, dan majalah. Siswa dapat membaca di tempat atau meminjam buku untuk dibawa pulang.' Simpulan yang tepat adalah ...",["Perpustakaan hanya untuk guru","Perpustakaan menyediakan bacaan dan layanan bagi siswa","Semua buku harus dibeli","Siswa tidak boleh membaca di tempat"],1,"Dua kalimat menjelaskan jenis bacaan dan layanan yang tersedia bagi siswa."],["Kalimat efektif adalah ...",["Para siswa-siswa sedang belajar.","Siswa sedang belajar di kelas.","Semua siswa-siswa semuanya hadir.","Bagi siswa diharapkan untuk supaya tenang."],1,"Kalimat 'Siswa sedang belajar di kelas' jelas dan tidak memakai kata berlebihan."],["Dalam teks laporan pengamatan, informasi sebaiknya disajikan berdasarkan ...",["Fakta hasil pengamatan","Cerita khayalan penulis","Pendapat tanpa bukti","Rumor teman"],0,"Laporan pengamatan harus didasarkan pada fakta yang diamati."]]
+ ],
+ pancasila:[
+  [["Saat teman berbeda pilihan permainan, kita sebaiknya ...",["Bertengkar","Bergantian dan saling mendengar","Memaksa teman","Mengejek"],1,"Bergantian dan saling mendengar membantu semua teman merasa dihargai."],["Membuang sampah pada tempatnya menunjukkan sikap ...",["Tanggung jawab","Iri hati","Malas","Curang"],0,"Menjaga kebersihan merupakan tanggung jawab bersama."],["Jika meminjam pensil, kita harus ...",["Menyimpannya selamanya","Mengembalikannya","Mematahkannya","Menyembunyikannya"],1,"Mengembalikan barang pinjaman menunjukkan tanggung jawab."]],
+  [["Kelas memilih tujuan kunjungan melalui diskusi. Sikap yang sesuai adalah ...",["Mendengar usul dan menerima keputusan bersama","Memaksakan usul sendiri","Tidak memberi kesempatan teman","Marah jika usul ditolak"],0,"Musyawarah memberi kesempatan menyampaikan pendapat dan menerima hasil bersama."],["Contoh kewajiban siswa di sekolah adalah ...",["Mendapat perlindungan","Menggunakan fasilitas","Mematuhi tata tertib","Menerima pelajaran"],2,"Mematuhi tata tertib adalah kewajiban siswa."],["Menghormati teman yang berbeda budaya mendukung ...",["Perpecahan","Persatuan dalam keberagaman","Persaingan tidak sehat","Sikap pilih kasih"],1,"Menghormati perbedaan membantu menjaga persatuan."]],
+  [["Warga berbeda pendapat tentang jadwal kerja bakti. Cara yang paling sesuai nilai musyawarah adalah ...",["Ketua memutuskan tanpa mendengar warga","Membahas usul, mempertimbangkan kebutuhan, lalu menyepakati jadwal","Membatalkan kerja bakti tanpa alasan","Mengikuti pendapat warga yang paling keras"],1,"Musyawarah mempertimbangkan pendapat bersama sebelum mencapai kesepakatan."],["Hak dan kewajiban perlu dilaksanakan secara seimbang karena ...",["Hak seseorang berkaitan dengan tanggung jawab dan hak orang lain","Kewajiban hanya berlaku untuk anak-anak","Hak selalu lebih penting daripada aturan","Kewajiban dapat diabaikan"],0,"Kehidupan bersama berjalan baik jika hak dihormati dan kewajiban dilakukan."],["Contoh menjaga persatuan di tengah perbedaan adalah ...",["Bekerja sama tanpa membeda-bedakan latar belakang","Berteman hanya dengan kelompok sendiri","Menolak semua kebiasaan berbeda","Menyebarkan ejekan"],0,"Kerja sama yang inklusif memperkuat persatuan."]]
+ ],
+ ipas:[
+  [["Bagian tubuh untuk mendengar bunyi adalah ...",["Mata","Telinga","Hidung","Kulit"],1,"Telinga berfungsi menerima bunyi."],["Hewan yang biasanya hidup di air adalah ...",["Ikan","Ayam","Kucing","Kupu-kupu"],0,"Ikan memiliki adaptasi untuk hidup di air."],["Cuaca cerah biasanya ditandai dengan ...",["Matahari terlihat","Hujan es selalu turun","Langit selalu gelap","Angin topan"],0,"Cuaca cerah umumnya memiliki cahaya matahari yang cukup."]],
+  [["Bagian tumbuhan yang menyerap air dari tanah adalah ...",["Akar","Bunga","Buah","Daun saja"],0,"Akar menyerap air dan mineral dari tanah."],["Benda yang tertarik kuat oleh magnet adalah ...",["Paku besi","Kertas","Kayu","Karet"],0,"Paku berbahan besi dapat ditarik magnet."],["Penguapan air paling cepat terjadi ketika ...",["Air mendapat panas matahari","Air diletakkan di tempat sangat dingin","Air ditutup rapat tanpa panas","Air menjadi es"],0,"Panas membantu air berubah menjadi uap lebih cepat."]],
+  [["Di rantai makanan rumput → belalang → katak → ular, konsumen tingkat pertama adalah ...",["Rumput","Belalang","Katak","Ular"],1,"Belalang memakan produsen, yaitu rumput, sehingga menjadi konsumen tingkat pertama."],["Dua lampu dipasang seri. Jika salah satu lampu putus, biasanya lampu lainnya ...",["Tetap menyala terang","Ikut padam","Berubah menjadi baterai","Menyala tanpa sumber listrik"],1,"Pada rangkaian seri, putusnya satu bagian memutus jalur arus."],["Rotasi bumi menyebabkan ...",["Pergantian siang dan malam","Pergantian musim setiap minggu","Bulan menghasilkan cahaya sendiri","Matahari mengelilingi bumi setiap hari"],0,"Rotasi bumi pada porosnya menyebabkan bagian bumi bergantian menghadap matahari."]]
+ ],
+ pjok:[
+  [["Sebelum berlari, kita sebaiknya ...",["Pemanasan ringan","Langsung duduk","Menahan napas","Makan sebanyak-banyaknya"],0,"Pemanasan menyiapkan otot dan tubuh sebelum aktivitas."],["Agar tidak terpeleset saat bermain, pilih ...",["Lantai aman dan alas kaki sesuai","Lantai licin","Area penuh barang","Tangga basah"],0,"Tempat yang aman dan alas kaki sesuai mengurangi risiko terpeleset."],["Saat teman jatuh ketika bermain, kita sebaiknya ...",["Menolong dan memanggil orang dewasa jika perlu","Menertawakan","Meninggalkannya","Mendorongnya lagi"],0,"Menolong teman dan meminta bantuan menjaga keselamatan."]],
+  [["Latihan daya tahan jantung dan paru-paru dapat berupa ...",["Berjalan cepat atau berlari ringan","Duduk diam sepanjang hari","Membaca sambil berbaring","Menahan napas lama"],0,"Aktivitas aerobik seperti berjalan cepat membantu melatih daya tahan."],["Dalam permainan beregu, strategi yang baik membutuhkan ...",["Komunikasi dan kerja sama","Bermain sendiri","Menyalahkan anggota","Mengabaikan aturan"],0,"Komunikasi membantu anggota tim menjalankan strategi bersama."],["Setelah olahraga, pendinginan dilakukan untuk ...",["Mengembalikan tubuh secara bertahap ke kondisi istirahat","Membuat tubuh langsung kelelahan","Mengganti semua makanan","Menghindari minum"],0,"Pendinginan membantu tubuh kembali ke kondisi istirahat secara bertahap."]],
+  [["Seorang siswa merasa pusing dan sangat lelah saat olahraga di bawah terik. Tindakan paling aman adalah ...",["Berhenti, pindah ke tempat sejuk, minum jika sadar penuh, dan memberi tahu guru","Memaksa berlari sampai selesai","Menyembunyikan kondisi dan terus bermain","Langsung melakukan sprint"],0,"Pusing dan kelelahan adalah tanda untuk berhenti dan meminta bantuan."],["Untuk meningkatkan kebugaran secara bertahap, latihan sebaiknya ...",["Teratur, sesuai kemampuan, dan meningkat perlahan","Selalu maksimal sejak hari pertama","Dilakukan tanpa istirahat","Hanya dilakukan sekali setahun"],0,"Latihan teratur dan bertahap lebih aman dan berkelanjutan."],["Fair play dalam pertandingan berarti ...",["Mematuhi aturan dan menghormati lawan","Menipu agar menang","Mengabaikan wasit","Mencederai lawan"],0,"Fair play menekankan kejujuran dan rasa hormat dalam olahraga."]]
+ ],
+ seni:[
+  [["Bentuk bola menyerupai ...",["Lingkaran","Segitiga","Persegi","Garis lurus"],0,"Gambar bola dari depan tampak berbentuk lingkaran."],["Bunyi tepuk tangan yang berulang teratur membentuk ...",["Irama","Warna","Tekstur","Bayangan"],0,"Pola bunyi yang teratur disebut irama."],["Alat yang dapat digunakan untuk menggambar adalah ...",["Pensil","Piring saja","Sepatu","Gelas minum"],0,"Pensil dapat digunakan untuk membuat garis dan gambar."]],
+  [["Pengulangan bentuk daun dalam gambar menghasilkan ...",["Pola","Bayangan saja","Nada tinggi","Bau"],0,"Pengulangan unsur visual membentuk pola."],["Warna merah dan kuning jika dicampur pada cat biasanya menghasilkan ...",["Jingga","Biru","Hijau","Hitam"],0,"Campuran merah dan kuning menghasilkan warna jingga."],["Dalam musik, tempo menunjukkan ...",["Cepat atau lambatnya lagu","Ukuran kertas","Warna alat musik","Jumlah penonton"],0,"Tempo adalah tingkat kecepatan musik."]],
+  [["Dalam poster ajakan menjaga lingkungan, perpaduan gambar dan teks yang baik harus ...",["Mudah dibaca dan mendukung pesan utama","Sengaja dibuat tidak terbaca","Tidak berhubungan dengan pesan","Dipenuhi hiasan tanpa informasi"],0,"Poster yang efektif menyampaikan pesan dengan jelas melalui teks dan visual."],["Kontras warna pada desain digunakan terutama untuk ...",["Membantu unsur penting terlihat jelas","Menyamarkan semua tulisan","Menghapus komposisi","Mengurangi keterbacaan"],0,"Kontras membantu membedakan unsur dan menonjolkan informasi penting."],["Ketika menilai karya teman, tanggapan yang baik adalah ...",["Menyebutkan hal yang kuat dan saran dengan sopan","Mengejek pembuatnya","Mengatakan semua karya tidak berguna","Membandingkan untuk mempermalukan"],0,"Apresiasi yang sopan memberi masukan yang bermanfaat."]]
+ ],
+ english:[
+  [["What is the English word for 'merah'?",["Red","Blue","Green","Yellow"],0,"Red means merah."],["Choose a greeting for the morning.",["Good morning","Good night","Goodbye","Sorry"],0,"Good morning is used to greet someone in the morning."],["What does 'thank you' mean?",["Terima kasih","Selamat malam","Sampai jumpa","Maaf"],0,"Thank you means terima kasih."]],
+  [["Complete: 'She ___ a book every day.'",["read","reads","reading","are read"],1,"With 'she' in the simple present, the verb is 'reads'."],["Which word is an adjective in 'The small cat sleeps'?",["cat","sleeps","small","the"],2,"Small describes the noun cat, so it is an adjective."],["Choose the correct response: 'How are you?'",["I am fine, thank you.","My name blue.","It is seven book.","Good night yesterday."],0,"'I am fine, thank you' is a natural response to asking about someone's condition."]],
+  [["Choose the correct sentence.",["They goes to school by bus.","They go to school by bus.","They going school by bus.","They is go by bus."],1,"The subject 'they' takes the base verb 'go' in the simple present."],["Complete: 'If it rains, we ___ indoors.'",["stay","stays","stayed tomorrow","staying"],0,"In a general real condition, 'if it rains' can be followed by 'we stay'."],["What is the main purpose of a recount text?",["To retell events that happened","To list unrelated words","To give only instructions","To describe a future plan only"],0,"A recount retells past events in sequence."]]
+ ],
+ agama:[
+  [["Jika berbuat salah, kita sebaiknya ...",["Mengakui dan meminta maaf","Menyalahkan teman","Berbohong","Melarikan diri"],0,"Mengakui kesalahan adalah langkah jujur untuk memperbaiki keadaan."],["Berbagi alat tulis dengan teman menunjukkan ...",["Kepedulian","Iri hati","Kesombongan","Kecurangan"],0,"Berbagi dengan wajar menunjukkan kepedulian kepada teman."],["Saat orang lain beribadah, kita perlu ...",["Menghormati dan tidak mengganggu","Mengejek","Berteriak di dekatnya","Merusak perlengkapannya"],0,"Menghormati orang lain membantu menjaga kerukunan."]],
+  [["Kamu menemukan uang di kelas dan tidak tahu pemiliknya. Tindakan bertanggung jawab adalah ...",["Menyerahkan kepada guru agar dicari pemiliknya","Menyimpannya diam-diam","Membaginya dengan teman","Membuangnya"],0,"Menyerahkan barang temuan kepada guru membantu mengembalikannya kepada pemilik."],["Saat berbeda pendapat dengan teman, sikap yang baik adalah ...",["Mendengarkan dan berbicara sopan","Memotong pembicaraan","Menghina","Memaksa"],0,"Mendengarkan dan berbicara sopan menunjukkan rasa hormat."],["Disiplin dalam belajar berarti ...",["Mengatur waktu dan menjalankan tugas","Mengerjakan tugas hanya jika diingatkan","Menunda semua pekerjaan","Menyalin jawaban teman"],0,"Disiplin berarti menaati aturan dan menjalankan tugas dengan konsisten."]],
+  [["Teman mengajak menyontek karena takut nilainya rendah. Pilihan yang paling berintegritas adalah ...",["Menolak dengan sopan dan mengerjakan sesuai kemampuan","Ikut menyontek agar kompak","Memberi jawaban untuk disalin","Menyembunyikan catatan bersama"],0,"Integritas berarti tetap jujur meskipun menghadapi tekanan."],["Ketika membantu orang lain, niat dan tindakan yang baik seharusnya disertai ...",["Ketulusan dan penghormatan","Keinginan mempermalukan","Tuntutan selalu dipuji","Harapan mengambil haknya"],0,"Bantuan yang tulus menghormati martabat orang yang dibantu."],["Jika janji tidak dapat ditepati karena keadaan mendesak, sebaiknya ...",["Memberi kabar dengan jujur dan menjelaskan keadaan","Menghilang tanpa kabar","Menyalahkan orang lain","Berpura-pura lupa"],0,"Kejujuran dan komunikasi membantu menjaga kepercayaan."]]
+ ],
+ lokal:[
+  [["Sampah bungkus makanan sebaiknya ...",["Dibuang pada tempatnya","Dilempar ke sungai","Ditinggal di halaman","Dimasukkan ke tanaman"],0,"Membuang sampah pada tempatnya menjaga lingkungan tetap bersih."],["Jika teman menggunakan bahasa daerah yang berbeda, kita sebaiknya ...",["Menghormati","Mengejek","Melarang berbicara","Menertawakan"],0,"Bahasa daerah merupakan bagian dari identitas budaya yang patut dihormati."],["Permainan tradisional bisa dikenal dengan cara ...",["Belajar dari keluarga dan masyarakat","Merusak alatnya","Mengejek pemainnya","Melarang semua orang"],0,"Keluarga dan masyarakat dapat mengenalkan permainan tradisional."]],
+  [["Mengapa cerita rakyat perlu dipelajari?",["Untuk mengenal nilai dan budaya masyarakat","Agar semua daerah menjadi sama","Untuk mengganti semua bahasa","Agar tradisi dilupakan"],0,"Cerita rakyat dapat menyimpan nilai dan pengetahuan budaya."],["Saat mengunjungi tempat budaya, kita sebaiknya ...",["Mengikuti aturan dan menjaga kebersihan","Mencoret bangunan","Mengambil benda tanpa izin","Mengganggu pengunjung"],0,"Menjaga aturan melindungi tempat dan menghormati masyarakat."],["Kerajinan lokal dapat mendukung masyarakat karena ...",["Menjaga keterampilan dan membuka peluang ekonomi","Membuat budaya hilang","Selalu berasal dari luar daerah","Tidak memerlukan keterampilan"],0,"Kerajinan dapat melestarikan keterampilan dan memberi peluang penghasilan."]],
+  [["Ketika mendokumentasikan tradisi masyarakat, langkah yang menghormati warga adalah ...",["Meminta izin dan mencatat informasi secara akurat","Mengambil gambar diam-diam dalam semua situasi","Mengubah cerita agar lebih sensasional","Menyebarkan informasi pribadi"],0,"Izin dan pencatatan akurat menunjukkan penghormatan terhadap masyarakat."],["Pelestarian bahasa daerah dapat dilakukan dengan ...",["Menggunakan dan mengajarkannya dalam konteks yang sesuai","Melarang generasi muda mempelajarinya","Mengejek penuturnya","Menghapus cerita lisan"],0,"Penggunaan dan pembelajaran bahasa membantu meneruskan warisan bahasa."],["Wisata alam yang bertanggung jawab berarti ...",["Menjaga habitat dan mengikuti aturan setempat","Meninggalkan sampah","Mengambil satwa liar","Merusak tanaman untuk kenang-kenangan"],0,"Wisata bertanggung jawab mengurangi dampak pada alam dan masyarakat."]]
+ ]
+ };
+ return (bank[subjectId]||bank.lokal)[tier].map(q=>q.slice());
+}
+function topicQuestionBank(subjectId, grade, idx){
+ const tier=grade<=2?0:grade<=4?1:2;
+ const math=[
+  [
+   [["Ada 4 kancing. Berapa jumlahnya jika ditambah 3?",["6","7","8","9"],1,"4 + 3 = 7."],["Angka setelah 18 adalah ...",["17","19","20","16"],1,"Setelah 18 adalah 19."],["Manakah yang paling banyak?",["5 benda","3 benda","2 benda","4 benda"],0,"Lima lebih banyak daripada dua, tiga, dan empat."],["Ada 9 ikan, 2 berenang menjauh. Berapa yang tersisa?",["6","7","8","11"],1,"9 − 2 = 7."],["Bilangan 14 terdiri dari ...",["1 puluhan dan 4 satuan","4 puluhan dan 1 satuan","14 puluhan","1 satuan dan 4 ratusan"],0,"14 terdiri dari 1 puluhan dan 4 satuan."]],
+   [["Nilai 248 terdiri dari ...",["2 ratusan, 4 puluhan, 8 satuan","2 puluhan, 4 ratusan, 8 satuan","24 ratusan dan 8 satuan","2 satuan, 4 puluhan, 8 ratusan"],0,"248 = 200 + 40 + 8."],["Urutkan dari kecil: 305, 350, 503.",["305, 350, 503","350, 305, 503","503, 350, 305","305, 503, 350"],0,"Bandingkan ratusan, lalu puluhan."],["Pembulatan 467 ke puluhan terdekat adalah ...",["460","470","400","500"],1,"Angka satuannya 7, maka dibulatkan naik menjadi 470."],["Hasil 125 + 238 adalah ...",["353","363","373","343"],1,"125 + 238 = 363."],["Bilangan 6.042 dibaca ...",["Enam ribu empat puluh dua","Enam ratus empat puluh dua","Enam ribu empat ratus dua","Enam puluh ribu empat puluh dua"],0,"6.042 berarti enam ribu empat puluh dua."]],
+   [["Bilangan 3/4 dibaca ...",["Tiga per empat","Tiga puluh empat","Empat per tiga","Tiga tambah empat"],0,"3/4 dibaca tiga per empat."],["Nilai angka 7 pada 57.316 adalah ...",["7","700","7.000","70.000"],2,"Angka 7 berada pada tempat ribuan, nilainya 7.000."],["Hasil 2.475 + 3.689 adalah ...",["6.064","6.164","5.164","6.264"],1,"2.475 + 3.689 = 6.164."],["Bilangan prima di bawah ini adalah ...",["21","27","29","33"],2,"29 hanya memiliki faktor positif 1 dan 29."],["Rata-rata 70, 80, 90, dan 80 adalah ...",["75","80","82,5","85"],1,"Jumlah 320 dibagi 4 adalah 80."]]
+  ],
+  [
+   [["Ada 3 pensil lalu mendapat 2 lagi. Jumlahnya ...",["4","5","6","3"],1,"3 + 2 = 5."],["5 + 4 = ...",["8","9","10","7"],1,"Lima ditambah empat sama dengan sembilan."],["Ada 8 balon, 3 pecah. Sisa balon ...",["4","5","6","11"],1,"8 − 3 = 5."],["7 − 2 = ...",["4","5","6","9"],1,"Tujuh dikurangi dua sama dengan lima."],["Kalimat matematika untuk 4 ditambah 6 adalah ...",["4 − 6","4 + 6","4 × 6","6 − 4"],1,"Kata ditambah ditulis dengan tanda +."]],
+   [["Sebuah toko menjual 125 buku pagi hari dan 178 sore hari. Total buku terjual ...",["293","303","313","283"],1,"125 + 178 = 303."],["Hasil 604 − 287 adalah ...",["317","327","417","307"],0,"604 − 287 = 317."],["Selisih 950 dan 675 adalah ...",["275","285","325","375"],0,"950 − 675 = 275."],["Jumlah 468 + 257 adalah ...",["715","725","735","7250"],1,"468 + 257 = 725."],["Ibu punya Rp50.000, belanja Rp32.500. Kembaliannya ...",["Rp17.500","Rp18.500","Rp22.500","Rp12.500"],0,"Rp50.000 − Rp32.500 = Rp17.500."]],
+   [["Suhu pagi 18°C lalu naik 7°C. Suhu sekarang ...",["25°C","24°C","26°C","11°C"],0,"18 + 7 = 25°C."],["Sebuah gudang memiliki 2.450 barang dan mengirim 875. Sisanya ...",["1.575","1.675","1.585","2.325"],0,"2.450 − 875 = 1.575."],["Bilangan x memenuhi x − 348 = 527. Nilai x adalah ...",["875","179","785","885"],0,"x = 527 + 348 = 875."],["Selisih 5.000 dan 2.768 adalah ...",["2.232","2.332","2.242","2.132"],0,"5.000 − 2.768 = 2.232."],["Jika 1.250 ditambah suatu bilangan menghasilkan 2.000, bilangan itu ...",["750","850","650","1.250"],0,"2.000 − 1.250 = 750."]]
+  ],
+  [
+   [["Ada 2 piring dengan masing-masing 3 kue. Jumlah kue ...",["5","6","7","8"],1,"2 × 3 = 6."],["12 permen dibagi rata kepada 3 anak. Tiap anak mendapat ...",["3","4","5","6"],1,"12 ÷ 3 = 4."],["4 kelompok masing-masing berisi 2 bola. Totalnya ...",["6","8","10","4"],1,"4 × 2 = 8."],["10 kue dibagi kepada 2 anak sama rata. Setiap anak mendapat ...",["2","5","8","12"],1,"10 ÷ 2 = 5."],["5 × 3 = ...",["8","15","10","20"],1,"Lima kelompok tiga berjumlah 15."]],
+   [["Ada 8 kantong berisi 6 kelereng tiap kantong. Totalnya ...",["42","48","54","56"],1,"8 × 6 = 48."],["45 kue dibagi rata kepada 5 anak. Tiap anak mendapat ...",["8","9","10","15"],1,"45 ÷ 5 = 9."],["Hasil 144 ÷ 12 adalah ...",["10","11","12","14"],2,"12 × 12 = 144."],["36 × 14 = ...",["404","504","514","604"],1,"36 × 14 = 36 × (10 + 4) = 504."],["Sebuah bus membawa 42 siswa dalam 3 rombongan sama besar. Tiap rombongan ...",["12","14","16","18"],1,"42 ÷ 3 = 14."]],
+   [["Sebuah paket berisi 24 kotak, tiap kotak berisi 18 pensil. Total pensil ...",["422","432","442","452"],1,"24 × 18 = 432."],["1.248 ÷ 24 = ...",["42","52","62","72"],1,"24 × 52 = 1.248."],["Jika 15 mesin menghasilkan 1.350 komponen sama banyak, tiap mesin menghasilkan ...",["80","90","100","110"],1,"1.350 ÷ 15 = 90."],["Hasil 125 × 32 adalah ...",["3.000","4.000","4.500","5.000"],1,"125 × 32 = 4.000."],["Suatu bilangan dibagi 16 hasilnya 35. Bilangan itu ...",["460","520","560","620"],2,"35 × 16 = 560."]]
+  ],
+  [
+   [["Satu dari dua bagian sama besar disebut ...",["Setengah","Sepertiga","Seperempat","Dua utuh"],0,"Satu dari dua bagian adalah setengah (1/2)."],["Pizza dibagi 4 bagian sama besar. Satu bagian adalah ...",["1/2","1/3","1/4","4/1"],2,"Satu dari empat bagian adalah 1/4."],["Mana yang menunjukkan setengah bagian?",["1/2","1/4","1/3","3/4"],0,"Setengah ditulis 1/2."],["Dua bagian dari empat bagian ditulis ...",["1/4","2/4","4/2","2/3"],1,"Dua dari empat bagian adalah 2/4."],["Jika satu kue dibagi dua sama besar, setiap bagian ...",["Sama besar","Pasti berbeda ukuran","Menjadi tiga bagian","Tidak bisa dihitung"],0,"Pembagian sama besar menghasilkan bagian yang ukurannya sama."]],
+   [["Pecahan yang senilai dengan 1/2 adalah ...",["2/4","1/3","3/5","2/3"],0,"1/2 = 2/4."],["Pecahan terbesar adalah ...",["1/4","3/4","1/2","2/8"],1,"3/4 lebih besar dari 1/2, 1/4, dan 2/8."],["3/8 + 2/8 = ...",["5/8","5/16","1/8","6/8"],0,"Penyebut sama, jumlahkan pembilang: 3 + 2 = 5."],["0,5 sama dengan pecahan ...",["1/2","1/5","5/1","1/4"],0,"0,5 = 5/10 = 1/2."],["Sebuah pita 3/4 meter dipotong 1/4 meter. Sisanya ...",["1/4 m","1/2 m","2/4 m","1 m"],1,"3/4 − 1/4 = 2/4 = 1/2 meter."]],
+   [["Hasil 2/3 + 1/6 adalah ...",["5/6","3/9","1/2","2/9"],0,"2/3 = 4/6, sehingga 4/6 + 1/6 = 5/6."],["25% dari 80.000 adalah ...",["Rp10.000","Rp20.000","Rp25.000","Rp40.000"],1,"25/100 × 80.000 = Rp20.000."],["Urutan dari terkecil adalah ...",["0,25; 1/2; 0,75","0,75; 0,25; 1/2","1/2; 0,75; 0,25","0,25; 0,75; 1/2"],0,"0,25 < 0,5 < 0,75."],["3/4 dibagi 1/2 = ...",["3/8","3/2","2/3","1/4"],1,"3/4 ÷ 1/2 = 3/4 × 2 = 3/2."],["Jika 2/5 dari 30 siswa ikut klub, jumlahnya ...",["10","12","15","18"],1,"2/5 × 30 = 12 siswa."]]
+  ],
+  [
+   [["Bangun datar dengan 3 sisi adalah ...",["Persegi","Segitiga","Lingkaran","Persegi panjang"],1,"Segitiga memiliki tiga sisi."],["Bentuk roda adalah ...",["Lingkaran","Persegi","Segitiga","Kubus"],0,"Permukaan roda berbentuk lingkaran."],["Bangun ruang seperti dadu adalah ...",["Kubus","Lingkaran","Segitiga","Garis"],0,"Dadu berbentuk kubus."],["Persegi memiliki ... sisi sama panjang.",["2","3","4","5"],2,"Persegi memiliki empat sisi sama panjang."],["Benda berbentuk tabung adalah ...",["Kaleng minuman","Buku datar","Penggaris","Kertas"],0,"Kaleng minuman berbentuk tabung."]],
+   [["Persegi panjang memiliki ... sudut siku-siku.",["2","3","4","5"],2,"Persegi panjang memiliki empat sudut siku-siku."],["Keliling persegi dengan sisi 6 cm adalah ...",["12 cm","18 cm","24 cm","36 cm"],2,"Keliling = 4 × 6 = 24 cm."],["Luas persegi panjang 8 cm × 5 cm adalah ...",["13 cm²","26 cm²","40 cm²","80 cm²"],2,"Luas = panjang × lebar = 40 cm²."],["Kubus memiliki ... rusuk.",["6","8","10","12"],3,"Kubus memiliki 12 rusuk."],["Volume balok 4 × 3 × 5 cm adalah ...",["12 cm³","20 cm³","60 cm³","45 cm³"],2,"Volume = 4 × 3 × 5 = 60 cm³."]],
+   [["Luas segitiga dengan alas 12 cm dan tinggi 8 cm adalah ...",["48 cm²","96 cm²","40 cm²","20 cm²"],0,"Luas = 1/2 × 12 × 8 = 48 cm²."],["Volume balok 12 cm × 5 cm × 4 cm adalah ...",["120 cm³","240 cm³","60 cm³","21 cm³"],1,"Volume = 12 × 5 × 4 = 240 cm³."],["Keliling lingkaran berjari-jari 7 cm (π=22/7) adalah ...",["22 cm","44 cm","154 cm","49 cm"],1,"K = 2πr = 2 × 22/7 × 7 = 44 cm."],["Luas trapesium dengan sisi sejajar 8 cm dan 14 cm, tinggi 5 cm adalah ...",["55 cm²","70 cm²","110 cm²","45 cm²"],0,"Luas = 1/2 × (8 + 14) × 5 = 55 cm²."],["Sebuah kubus memiliki sisi 6 cm. Volumenya ...",["36 cm³","108 cm³","216 cm³","256 cm³"],2,"Volume = 6³ = 216 cm³."]]
+  ],
+  [
+   [["Benda yang lebih panjang dapat dibandingkan dengan ...",["Mengukur dengan satuan sama","Menebak saja","Mengubah satuan setiap saat","Tidak mengamati"],0,"Gunakan satuan yang sama agar perbandingan adil."],["Jam menunjukkan pukul 7.00. Satu jam kemudian adalah ...",["6.00","7.30","8.00","9.00"],2,"Satu jam setelah pukul 7.00 adalah 8.00."],["Satuan untuk mengukur berat semangka adalah ...",["Kilogram","Liter","Meter","Menit"],0,"Kilogram digunakan untuk mengukur massa/berat sehari-hari."],["Data warna kesukaan: merah 3, biru 5. Yang lebih banyak dipilih ...",["Merah","Biru","Sama banyak","Tidak diketahui"],1,"Lima lebih besar daripada tiga."],["100 cm sama dengan ...",["1 m","10 m","100 m","1 km"],0,"100 sentimeter sama dengan 1 meter."]],
+   [["Panjang 2,5 m sama dengan ...",["25 cm","250 cm","2.500 cm","0,25 cm"],1,"1 m = 100 cm, jadi 2,5 m = 250 cm."],["Durasi dari pukul 08.15 sampai 09.00 adalah ...",["35 menit","45 menit","50 menit","55 menit"],1,"Dari 08.15 ke 09.00 ada 45 menit."],["Median data 3, 5, 8, 9, 12 adalah ...",["5","8","9","12"],1,"Nilai tengah dari lima data berurutan adalah 8."],["Luas kebun 12 m × 7 m adalah ...",["19 m²","38 m²","84 m²","96 m²"],2,"12 × 7 = 84 m²."],["Sebuah botol berisi 1,5 liter. Dalam mililiter jumlahnya ...",["150 ml","1.050 ml","1.500 ml","15.000 ml"],2,"1 liter = 1.000 ml, jadi 1,5 liter = 1.500 ml."]],
+   [["Rata-rata 72, 80, 84, 92 adalah ...",["80","82","84","86"],1,"Jumlah 328 dibagi 4 = 82."],["Jarak pada peta 4 cm dengan skala 1:50.000 mewakili ...",["200 m","2 km","20 km","500 m"],1,"4 × 50.000 cm = 200.000 cm = 2 km."],["Modus data 4, 6, 6, 7, 8, 6, 9 adalah ...",["4","6","7","9"],1,"Angka 6 muncul paling sering."],["Volume air 2,75 liter setara dengan ...",["275 ml","2.075 ml","2.750 ml","27.500 ml"],2,"2,75 liter = 2.750 ml."],["Jarak 180 km ditempuh dalam 3 jam. Kecepatan rata-rata ...",["50 km/jam","60 km/jam","70 km/jam","90 km/jam"],1,"180 ÷ 3 = 60 km/jam."]]
+  ]
+ ];
+ if(subjectId==="math")return math[idx]?.[tier]?.map(q=>q.slice())||null;
+ return null;
+}
+function makeLesson(subject, grade, idx){
+ const base=(BASE_LESSONS[subject.id]||BASE_LESSONS.lokal)[0] ? BASE_LESSONS[subject.id][0] : BASE_LESSONS.lokal[0];
+ const topic=subject.topics[idx];
+ const levelNotes=[
+ "Gunakan benda nyata, gambar, dan kata-kata sederhana. Belajar sedikit demi sedikit, lalu coba sendiri.",
+ "Amati contoh yang dekat dengan rumah dan sekolah. Jelaskan jawaban dengan kalimat sederhana.",
+ "Bandingkan beberapa contoh, cari pola, dan ceritakan alasanmu.",
+ "Gunakan istilah penting, lakukan pengamatan, dan hubungkan dengan pengalaman sehari-hari.",
+ "Periksa informasi, jelaskan strategi, dan coba menyelesaikan tantangan secara mandiri.",
+ "Gunakan penalaran, rangkum informasi penting, dan siapkan diri untuk pembelajaran berikutnya."
+ ];
+ let text=base.text+" "+levelNotes[grade-1]+" Materi dan soal disesuaikan untuk "+CLASS_NAMES[grade-1]+".";
+ let example=base.example;
+ if(subject.id==="math"){
+  const mathExamples=[
+   ["Gunakan nilai tempat sesuai kelas: 24 = 2 puluhan + 4 satuan.","248 = 200 + 40 + 8.","6.042 = 6.000 + 40 + 2."],
+   ["Ada 4 kancing, lalu 3 lagi datang. Hitung semuanya.","125 buku + 178 buku = 303 buku.","Jika x − 348 = 527, maka x = 875."],
+   ["Dua piring berisi 3 kue tiap piring: 2 × 3 = 6.","8 kantong × 6 kelereng = 48 kelereng.","24 × 18 = 432; gunakan perkalian bersusun atau pemecahan bilangan."],
+   ["Satu dari dua bagian pizza sama besar adalah 1/2.","3/4 berarti tiga dari empat bagian sama besar.","2/3 + 1/6 = 5/6 karena 2/3 = 4/6."],
+   ["Amati bentuk kotak, roda, dan kaleng untuk mengenali bangun.","Luas persegi panjang 8 cm × 5 cm = 40 cm².","Volume balok 12 × 5 × 4 = 240 cm³."],
+   ["Bandingkan panjang dua benda memakai satuan yang sama.","2,5 meter = 250 sentimeter.","Jarak 180 km ditempuh 3 jam berarti 60 km/jam."]
+  ];
+  example=mathExamples[idx]?.[grade<=2?0:grade<=4?1:2]||example;
+ }
+ let questions=topicQuestionBank(subject.id,grade,idx)||gradeLevelQuestions(subject.id,grade);
+ const objective=base.objective+" "+(grade<=2?"Fokus pada pengenalan dan contoh konkret.":grade<=4?"Fokus pada pemahaman konsep dan penerapan.":"Fokus pada penalaran dan penerapan dalam situasi baru.");
+ return {title:topic,objective,text,example,anim:base.anim,animTitle:base.animTitle,animCaption:base.animCaption,questions};
+}
+const DATA={};for(let g=1;g<=6;g++){DATA[g]={};SUBJECTS.forEach(s=>DATA[g][s.id]=s.topics.map((_,i)=>makeLesson(s,g,i)));}
+const state={grade:1,subject:"math",chapter:0,stars:0,coins:0,badges:[],completed:{},best:{},practiceDone:{},sound:true,practice:false,questions:[],qIndex:0,roundScore:0,answers:[],selected:null,answered:false,animPlayed:{},position:{x:8,y:8}};
+function loadState(){try{const d=JSON.parse(localStorage.getItem("petualanganCerdasV1")||"{}");Object.assign(state,d);state.completed=state.completed||{};state.best=state.best||{};state.practiceDone=state.practiceDone||{};state.badges=state.badges||[];state.animPlayed=state.animPlayed||{};}catch(e){}}
+function saveState(){try{localStorage.setItem("petualanganCerdasV1",JSON.stringify(state));}catch(e){} updateStats();}
+function key(g,s,c){return `${g}-${s}-${c}`}
+function isDone(g,s,c){return !!state.completed[key(g,s,c)]}
+function isUnlocked(g,s,c){return c===0||isDone(g,s,c-1)}
+function totalDone(g,s){return DATA[g][s].filter((_,i)=>isDone(g,s,i)).length}
+function updateStats(){["statStars","sideStars"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=state.stars});["statCoins","sideCoins"].forEach(id=>{let e=document.getElementById(id);if(e)e.textContent=state.coins});let b=document.getElementById("statBadges");if(b)b.textContent=state.badges.length}
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="classes")renderClasses();if(id==="subjects")renderSubjects();if(id==="mapScreen")renderMap();updateStats()}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.remove("hidden");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>t.classList.add("hidden"),2300)}
+function playTone(freq=600,duration=.12){if(!state.sound)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.frequency.value=freq;o.type="sine";g.gain.value=.06;o.connect(g);g.connect(c.destination);o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+duration);o.stop(c.currentTime+duration);o.onended=()=>c.close()}catch(e){}}
+document.getElementById("soundBtn").onclick=()=>{state.sound=!state.sound;document.getElementById("soundBtn").textContent=state.sound?"🔊 Suara: ON":"🔇 Suara: OFF";saveState();if(state.sound)playTone()};
+function classCard(g){let done=0,total=0;SUBJECTS.forEach(s=>{total+=DATA[g][s.id].length;done+=totalDone(g,s.id)});return `<div class="card class-card"><div class="emoji">${CLASS_EMOJI[g-1]}</div><h3>${CLASS_NAMES[g-1]}</h3><span class="tag">${done}/${total} bab selesai</span><div class="progress"><span style="width:${100*done/total}%"></span></div><button onclick="chooseClass(${g})">Masuk kelas →</button></div>`}
+function renderClasses(){document.getElementById("classGrid").innerHTML=Array.from({length:6},(_,i)=>classCard(i+1)).join("")}
+function renderHome(){document.getElementById("homeClasses").innerHTML=Array.from({length:6},(_,i)=>classCard(i+1)).join("")}
+function chooseClass(g){state.grade=g;saveState();showScreen("subjects")}
+function renderSubjects(){document.getElementById("subjectHeading").textContent=`Kelas ${state.grade} • Pilih mata pelajaran`;document.getElementById("subjectGrid").innerHTML=SUBJECTS.map(s=>{let done=totalDone(state.grade,s.id),total=DATA[state.grade][s.id].length;return `<div class="card subject-card"><div class="subject-icon">${s.icon}</div><div style="flex:1"><h3>${s.name}</h3><p class="muted tiny">${total} bab pembelajaran</p><div class="progress"><span style="width:${done/total*100}%"></span></div><p class="tiny">${done} dari ${total} bab selesai</p><button onclick="chooseSubject('${s.id}')">Jelajahi dunia →</button></div></div>`}).join("")}
+function chooseSubject(id){state.subject=id;state.chapter=0;saveState();showScreen("mapScreen")}
+function renderMap(){let s=SUBJECTS.find(x=>x.id===state.subject),lessons=DATA[state.grade][state.subject],done=totalDone(state.grade,state.subject);document.getElementById("mapHeading").textContent=`Kelas ${state.grade} • ${s.name}`;document.getElementById("mapTitle").textContent=`${s.icon} Dunia ${s.name}`;document.getElementById("worldMission").textContent=done===lessons.length?"Hebat! Semua bab di dunia ini selesai.":`Selesaikan ${lessons.length-done} bab lagi untuk menuntaskan dunia ini.`;document.getElementById("subjectProgress").style.width=(done/lessons.length*100)+"%";document.getElementById("progressText").textContent=`${done} dari ${lessons.length} bab selesai`;document.getElementById("mapNodes").innerHTML=lessons.map((l,i)=>{let d=isDone(state.grade,state.subject,i),u=isUnlocked(state.grade,state.subject,i);return `<button class="node ${d?"done":""} ${u&&!d?"current":""} ${!u?"locked":""}" ${u?`onclick="openChapter(${i})"`:"disabled"}><span class="nicon">${d?"✅":u?"📘":"🔒"}</span><b>Bab ${i+1}</b><small>${l.title}</small>${d?'<small>⭐ Tuntas</small>':!u?'<small>Terkunci</small>':'<small>Mulai belajar</small>'}</button>`}).join("");document.getElementById("mapAvatar").style.left=(8+(state.chapter%3)*28)+"%";document.getElementById("mapAvatar").style.bottom=(8+(state.chapter%2)*7)+"%";updateStats()}
+function openChapter(i){if(!isUnlocked(state.grade,state.subject,i)){toast("Selesaikan bab sebelumnya terlebih dahulu.");return}state.chapter=i;saveState();renderLesson();showScreen("lesson")}
+function startNextChapter(){let lessons=DATA[state.grade][state.subject],i=lessons.findIndex((_,idx)=>!isDone(state.grade,state.subject,idx));if(i<0){toast("Dunia ini sudah tuntas! Pilih dunia lain.");return}openChapter(i)}
+function currentLesson(){return DATA[state.grade][state.subject][state.chapter]}
+function earlyGradeCopy(l,s){
+ const copy={
+  math:{objective:"Ayo belajar angka dengan melihat dan menghitung benda!",text:"Lihat gambarnya. Hitung satu per satu. Kita belajar pelan-pelan, ya!",example:"🍎 🍎 🍎 Ada tiga apel. Dua apel lagi datang. Ayo hitung semua apelnya!"},
+  indo:{objective:"Ayo kenal huruf, bunyi, dan kata!",text:"Dengarkan kata. Lihat hurufnya. Ucapkan bersama-sama!",example:"🔤 B-O-L-A dibaca bola. Ayo ucapkan: bola!"},
+  pancasila:{objective:"Ayo belajar menjadi teman yang baik!",text:"Kita belajar berbagi, menolong, dan berkata jujur.",example:"🤝 Teman jatuh? Ayo bantu teman berdiri."},
+  ipas:{objective:"Ayo mengenal benda, hewan, tumbuhan, dan alam!",text:"Amati gambar. Apa yang kamu lihat? Kita belajar dari hal di sekitar kita.",example:"🌱 Tumbuhan perlu air dan cahaya matahari untuk tumbuh."},
+  pjok:{objective:"Ayo bergerak supaya tubuh sehat!",text:"Ikuti gerakan dengan aman. Beri ruang untuk teman.",example:"🏃 Berjalan, melompat, lalu minum air saat haus."},
+  seni:{objective:"Ayo bermain warna, bentuk, bunyi, dan gerak!",text:"Amati warna dan bentuk. Kamu boleh mencoba dan berkreasi.",example:"🎨 Merah + kuning dapat menghasilkan warna jingga saat cat dicampur."},
+  english:{objective:"Ayo belajar kata bahasa Inggris yang mudah!",text:"Dengarkan, tirukan, dan ucapkan kata bersama-sama.",example:"👋 Hello artinya halo. Ayo ucapkan: Hello!"},
+  agama:{objective:"Ayo belajar berbuat baik setiap hari!",text:"Kita belajar bersyukur, berkata baik, dan menyayangi sesama.",example:"💛 Mengucapkan terima kasih adalah salah satu cara menghargai orang lain."},
+  lokal:{objective:"Ayo mengenal lingkungan dan budaya di sekitar kita!",text:"Lihat, dengarkan, dan ceritakan hal yang kamu kenal dari rumahmu.",example:"🏝️ Kita menjaga lingkungan dengan membuang sampah pada tempatnya."}
+ };
+ return copy[s.id]||copy.lokal;
+}
+function speakText(text){if(!('speechSynthesis' in window)){toast("Fitur suara belum didukung browser ini.");return}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="id-ID";u.rate=0.82;u.pitch=1.05;window.speechSynthesis.speak(u)}
+function speakCurrentLesson(){const l=currentLesson(),s=SUBJECTS.find(x=>x.id===state.subject);if(state.grade<=2){const c=earlyGradeCopy(l,s);speakText(l.title+". "+c.objective+". "+c.text+". Contoh. "+c.example)}else{speakText(l.title+". "+l.objective+". "+l.text+". Contoh. "+l.example)}}
+function speakQuestion(){const q=state.questions[state.qIndex];if(q)speakText(q.q+" Pilihan jawaban. "+q.options.map((o,i)=>String.fromCharCode(65+i)+". "+o).join(". "))}
+function updateLessonProgress(){const k=key(state.grade,state.subject,state.chapter);let pct=15;if(state.animPlayed[k])pct=40;if(state.practiceDone[k])pct=70;if(state.completed[k])pct=100;const bar=document.getElementById("lessonProgress");if(bar)bar.style.width=pct+"%";return pct}
+function renderLesson(){stopAnimation();let l=currentLesson(),s=SUBJECTS.find(x=>x.id===state.subject),early=state.grade<=2,copy=early?earlyGradeCopy(l,s):null;document.getElementById("lessonEyebrow").textContent=`Kelas ${state.grade} • ${s.name} • Bab ${state.chapter+1}`;document.getElementById("lessonHeading").textContent=l.title;document.getElementById("lessonTitle").textContent=l.title;document.getElementById("lessonIcon").textContent=s.icon;document.getElementById("lessonObjective").textContent=early?copy.objective:l.objective;document.getElementById("objectiveText").textContent=early?copy.objective:l.objective;document.getElementById("lessonText").textContent=early?copy.text:l.text;document.getElementById("lessonExample").textContent=early?copy.example:l.example;document.getElementById("lessonSteps").innerHTML=early?"① Lihat gambar 👀<br>② Dengarkan 🔊<br>③ Coba bersama ✋<br>④ Main kuis 🎈":"① Baca materi<br>② Tonton animasi<br>③ Latihan<br>④ Kuis akhir";animationStepIndex=0;renderAnimationStep();document.getElementById("animTitle").textContent=l.animTitle;document.getElementById("animCaption").textContent="Tekan Mulai animasi, lalu ikuti gambar dan keterangannya langkah demi langkah.";document.getElementById("animProgress").style.width="0%";document.getElementById("buddyTip").textContent=state.grade<=2?"“Ayo amati gambar dan hitung pelan-pelan. Kamu hebat!”":"“Coba hubungkan materi dengan pengalamanmu sendiri. Kamu pasti bisa!”";const chapterKey=key(state.grade,state.subject,state.chapter);const steps=document.getElementById("lessonSteps");steps.innerHTML=(early?"① Lihat gambar 👀<br>② Dengarkan 🔊<br>③ Coba bersama ✋<br>④ Main kuis 🎈":"① Baca materi<br>② Tonton animasi<br>③ Latihan<br>④ Kuis akhir")+`<br><br><b>${state.practiceDone[chapterKey]?"✅ Latihan selesai":"⬜ Latihan belum selesai"}</b><br><b>${state.completed[chapterKey]?"✅ Kuis lulus, bab tuntas":"⬜ Kuis akhir belum lulus"}</b>`;updateLessonProgress()}
+const ANIMATION_STORIES={
+ math:[
+  [{icon:"🍎🍎🍎",label:"Ada 3 apel"},{icon:"🍎🍎 ➜",label:"Datang 2 apel lagi"},{icon:"🍎🍎🍎🍎🍎",label:"Hitung semuanya"}],
+  [{icon:"🍎🍎🍎🍎",label:"Ada 4 apel"},{icon:"➕ 🍎🍎",label:"Tambah 2 apel"},{icon:"🍎🍎🍎🍎🍎🍎",label:"Sekarang 6 apel"}],
+  [{icon:"🟡🟡🟡",label:"3 kelompok"},{icon:"× 2",label:"Tiap kelompok 2"},{icon:"🟡🟡🟡🟡🟡🟡",label:"Total 6 benda"}],
+  [{icon:"🍕",label:"Satu pizza utuh"},{icon:"✂️",label:"Dibagi 2 sama besar"},{icon:"🍕½",label:"Satu bagian = setengah"}],
+  [{icon:"📦",label:"Benda berbentuk ruang"},{icon:"🔍",label:"Amati sisi dan sudut"},{icon:"🧊",label:"Ini contoh kubus"}],
+  [{icon:"📏",label:"Siapkan penggaris"},{icon:"📐",label:"Ukur dari angka 0"},{icon:"📏",label:"Baca hasil ukuran"}]
+ ],
+ ipas:[
+  [{icon:"👀",label:"Mata melihat"},{icon:"👂",label:"Telinga mendengar"},{icon:"👃",label:"Hidung mencium"}],
+  [{icon:"🌱",label:"Tumbuhan"},{icon:"☀️ + 💧",label:"Butuh cahaya dan air"},{icon:"🌿",label:"Tumbuh sehat"}],
+  [{icon:"🗑️",label:"Sampah di tanah"},{icon:"🧤♻️",label:"Pilah dan buang benar"},{icon:"🌳🦋",label:"Lingkungan lebih bersih"}],
+  [{icon:"🧍",label:"Dorong bola"},{icon:"⚽ ➡️",label:"Bola bergerak"},{icon:"🛑⚽",label:"Gaya dapat menghentikan"}],
+  [{icon:"🌊",label:"Air menguap"},{icon:"☁️",label:"Uap jadi awan"},{icon:"🌧️",label:"Hujan turun kembali"}],
+  [{icon:"☀️",label:"Matahari"},{icon:"🌍",label:"Bumi mengelilingi Matahari"},{icon:"🌙",label:"Bulan mengelilingi Bumi"}]
+ ],
+ indo:[
+  [{icon:"🔤",label:"Kenali huruf"},{icon:"🐝",label:"Gabungkan bunyi"},{icon:"📖",label:"Baca kata"}],
+  [{icon:"🐱",label:"Kucing"},{icon:"➕",label:"Susun huruf"},{icon:"K U C I N G",label:"Jadilah kata KUCING"}],
+  [{icon:"👧",label:"Siapa?"},{icon:"🏫",label:"Di mana?"},{icon:"💬",label:"Buat kalimat lengkap"}],
+  [{icon:"📖",label:"Baca cerita"},{icon:"👀",label:"Cari tokohnya"},{icon:"💡",label:"Ceritakan kembali"}],
+  [{icon:"📄",label:"Baca paragraf"},{icon:"🔎",label:"Cari gagasan utama"},{icon:"⭐",label:"Temukan ide pokok"}],
+  [{icon:"📚",label:"Baca teks"},{icon:"✏️",label:"Pilih informasi penting"},{icon:"📝",label:"Tulis ringkasan"}]
+ ],
+ pancasila:[
+  [{icon:"🏠",label:"Ada aturan"},{icon:"🧹",label:"Rapikan mainan"},{icon:"😊",label:"Rumah nyaman"}],
+  [{icon:"🗣️",label:"Teman berbeda pendapat"},{icon:"👂",label:"Dengarkan dengan baik"},{icon:"🤝",label:"Tetap saling menghargai"}],
+  [{icon:"🇮🇩",label:"Lambang negara"},{icon:"🛡️",label:"Amati simbol Pancasila"},{icon:"⭐",label:"Ingat nilai baiknya"}],
+  [{icon:"📚",label:"Hak: belajar"},{icon:"🧹",label:"Kewajiban: menjaga kelas"},{icon:"⚖️",label:"Lakukan keduanya"}],
+  [{icon:"💬",label:"Sampaikan pendapat"},{icon:"🙋",label:"Dengarkan semua teman"},{icon:"🤝",label:"Sepakati bersama"}],
+  [{icon:"👧👦",label:"Berbeda-beda"},{icon:"🎉",label:"Hormati perbedaan"},{icon:"🇮🇩",label:"Tetap bersatu"}]
+ ],
+ english:[
+  [{icon:"👋",label:"Hello!"},{icon:"🙂",label:"My name is Ana."},{icon:"👋",label:"Goodbye!"}],
+  [{icon:"1️⃣ 2️⃣ 3️⃣",label:"One, two, three"},{icon:"🔴🔵",label:"Red, blue"},{icon:"🎨",label:"Say the color"}],
+  [{icon:"✏️",label:"Pencil"},{icon:"📚",label:"Books"},{icon:"🎒",label:"Bag"}],
+  [{icon:"👨‍👩‍👧",label:"Family"},{icon:"🐱",label:"Cat"},{icon:"🐶",label:"Dog"}],
+  [{icon:"🌅",label:"Wake up"},{icon:"🪥",label:"Brush my teeth"},{icon:"🎒",label:"Go to school"}],
+  [{icon:"👧",label:"I"},{icon:"❤️",label:"like"},{icon:"🍎",label:"I like apples."}]
+ ],
+ pjok:[[{icon:"🚶",label:"Berjalan"},{icon:"🏃",label:"Berlari"},{icon:"🤸",label:"Melompat"}],[{icon:"🏃",label:"Bergerak"},{icon:"💧",label:"Minum air"},{icon:"💪",label:"Tubuh lebih bugar"}],[{icon:"⚽",label:"Bermain bersama"},{icon:"🤝",label:"Bergiliran"},{icon:"😊",label:"Kerja sama"}],[{icon:"🧼",label:"Cuci tangan"},{icon:"🫧",label:"Pakai sabun"},{icon:"👐",label:"Bilas sampai bersih"}],[{icon:"👟",label:"Pakai sepatu"},{icon:"👀",label:"Periksa sekitar"},{icon:"🛡️",label:"Bergerak dengan aman"}],[{icon:"🥗",label:"Makan bergizi"},{icon:"🏃",label:"Aktif bergerak"},{icon:"😴",label:"Istirahat cukup"}]],
+ seni:[[{icon:"🔴",label:"Warna merah"},{icon:"🟡",label:"Warna kuning"},{icon:"🟠",label:"Campuran jadi oranye"}],[{icon:"👏",label:"Tepuk irama"},{icon:"🥁",label:"Ikuti ketukan"},{icon:"🎵",label:"Buat pola bunyi"}],[{icon:"〰️",label:"Buat garis"},{icon:"🔺",label:"Tambahkan bentuk"},{icon:"🎨",label:"Jadilah pola"}],[{icon:"📦",label:"Bahan bekas"},{icon:"✂️",label:"Potong dengan aman"},{icon:"🖼️",label:"Buat karya"}],[{icon:"👀",label:"Amati karya"},{icon:"💬",label:"Ceritakan yang disukai"},{icon:"👏",label:"Hargai karya teman"}],[{icon:"💡",label:"Punya ide"},{icon:"🎭",label:"Berlatih"},{icon:"🌟",label:"Tampilkan karya"}]],
+ agama:[[{icon:"😊",label:"Lihat teman butuh bantuan"},{icon:"🤲",label:"Tawarkan bantuan"},{icon:"💛",label:"Berbuat baik"}],[{icon:"🧸",label:"Menemukan barang"},{icon:"🙋",label:"Cari pemiliknya"},{icon:"🤝",label:"Kembalikan dengan jujur"}],[{icon:"👵",label:"Dengarkan keluarga"},{icon:"🙏",label:"Bicara sopan"},{icon:"❤️",label:"Tunjukkan hormat"}],[{icon:"😟",label:"Teman kesulitan"},{icon:"🤲",label:"Bantu semampunya"},{icon:"😊",label:"Peduli sesama"}],[{icon:"🌞",label:"Nikmati hari baru"},{icon:"🙏",label:"Ucapkan syukur"},{icon:"🧹",label:"Tunjukkan lewat tindakan"}],[{icon:"🗣️",label:"Bicara dengan tenang"},{icon:"👂",label:"Mendengarkan"},{icon:"🕊️",label:"Hidup damai"}]],
+ lokal:[[{icon:"🏡",label:"Amati lingkungan"},{icon:"🌳",label:"Kenali alam sekitar"},{icon:"🧹",label:"Jaga kebersihan"}],[{icon:"🎉",label:"Tradisi daerah"},{icon:"👨‍👩‍👧‍👦",label:"Dilakukan bersama"},{icon:"💛",label:"Hormati budaya"}],[{icon:"🗣️",label:"Dengar bahasa daerah"},{icon:"💬",label:"Pelajari kata baru"},{icon:"🤝",label:"Gunakan dengan sopan"}],[{icon:"🌾",label:"Bahan dari sekitar"},{icon:"👐",label:"Diolah menjadi karya"},{icon:"🧺",label:"Hasil kerajinan"}],[{icon:"🗑️",label:"Kurangi sampah"},{icon:"♻️",label:"Gunakan kembali"},{icon:"🌊",label:"Jaga alam setempat"}],[{icon:"📜",label:"Cerita masa lalu"},{icon:"👵",label:"Tanya orang tua"},{icon:"🏝️",label:"Jaga warisan budaya"}]]
+};
+let animationStepIndex=0, animationTimer=null;
+let animationSpeech=null;
+function speakAnimationStep(){
+  if(!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) return;
+  window.speechSynthesis.cancel();
+  const item=animationSteps()[animationStepIndex];
+  const title=document.getElementById("animTitle")?.textContent||"";
+  const caption=document.getElementById("animCaption")?.textContent||"";
+  const spoken=`Langkah ${animationStepIndex+1}. ${title}. ${item.label}. ${caption}`;
+  animationSpeech=new SpeechSynthesisUtterance(spoken);
+  animationSpeech.lang="id-ID";
+  animationSpeech.rate=0.78;
+  animationSpeech.pitch=1.05;
+  window.speechSynthesis.speak(animationSpeech);
+}
+function stopAnimation(){if(animationTimer){clearInterval(animationTimer);animationTimer=null} if("speechSynthesis" in window) window.speechSynthesis.cancel()}
+function animationSteps(){
+ const subject=state.subject,grade=state.grade,chapter=state.chapter%6;
+ const lesson=currentLesson();
+ const title=(lesson?.title||"").toLowerCase();
+ const tier=grade<=2?0:grade<=4?1:2;
+ const make=(a,b,c)=>[{icon:a[0],label:a[1]},{icon:b[0],label:b[1]},{icon:c[0],label:c[1]}];
+ // Animasi dipilih berdasarkan materi dan tingkat kelas, bukan hanya nomor bab.
+ if(subject==="math"){
+  if(/pecahan|fraction/.test(title)|| (grade>=3 && chapter===3)){
+   if(grade<=2)return make(["🍕","Satu pizza utuh"],["✂️","Bagi menjadi dua bagian sama besar"],["🍕🍕","Setiap bagian adalah setengah"]);
+   if(grade<=4)return make(["🍕","Satu pizza utuh"],["➗4","Bagi menjadi empat bagian sama besar"],["🍕🟨🟨🟨","Tiga dari empat bagian = 3/4"]);
+   return make(["▰▰▰▰","Satu utuh dibagi empat bagian sama besar"],["🟦🟦🟦⬜","Warnai tiga dari empat bagian"],["¾","Tulis bagian yang diwarnai sebagai 3/4"]);
+  }
+  if(/persen|diskon|harga/.test(title)){
+   if(grade<=2)return make(["🏷️","Harga barang Rp10.000"],["💸","Potongan harga sederhana"],["🛍️","Hitung uang yang perlu dibayar"]);
+   if(grade<=4)return make(["🎒 Rp80.000","Harga awal tas"],["🏷️ 25%","Diskon seperempat harga"],["💰 Rp60.000","Potongan Rp20.000, harga akhir Rp60.000"]);
+   return make(["🎒 Rp80.000","Harga awal = Rp80.000"],["🧮 25/100 × 80.000","Hitung potongan: Rp20.000"],["💰 Rp60.000","Harga setelah diskon = Rp60.000"]);
+  }
+  if(/desimal|koma/.test(title))return grade<=2?make(["🔢 1","Kenali angka"],["🟡🟡","Kelompokkan benda"],["✍️","Ceritakan jumlahnya"]):grade<=4?make(["0,5","Baca bilangan desimal"],["½","Hubungkan dengan setengah"],["0,5 = 1/2","Bandingkan bentuk penulisannya"]):make(["2,35","Amati nilai tempat"],["2 + 0,3 + 0,05","Uraikan nilai tempat"],["2,35","Gabungkan kembali nilainya"]);
+  if(/bangun ruang|kubus|balok|volume/.test(title)||chapter===4&&grade>=3)return grade<=2?make(["🧊","Amati benda berbentuk ruang"],["📦","Lihat sisi dan sudut"],["🧊","Cari benda serupa di sekitar"]):grade<=4?make(["📦","Balok memiliki panjang, lebar, tinggi"],["📏","Ukur setiap rusuk yang diperlukan"],["🧊","Hubungkan bentuk dengan benda nyata"]):make(["📦","Catat panjang, lebar, dan tinggi"],["✖️","Kalikan p × l × t"],["📦","Hasilnya adalah volume balok"]);
+  if(/ukur|panjang|keliling|luas/.test(title))return grade<=2?make(["📏","Bandingkan benda"],["🧱🧱🧱","Ukur dengan satuan sama"],["📐","Tentukan mana lebih panjang"]):grade<=4?make(["▱","Amati sisi bangun"],["📏","Ukur sisi yang diperlukan"],["🧮","Hitung sesuai aturan materi"]):make(["▱","Tentukan ukuran sisi"],["🧮","Pilih rumus yang sesuai"],["✅","Hitung dan periksa satuan"]);
+  if(grade<=2)return make(["🔵🔵🔵","Hitung tiga benda"],["➕ 🔵🔵","Tambahkan dua benda"],["🔵🔵🔵🔵🔵","Hitung semuanya: lima"]);
+  if(grade<=4)return make(["246","Amati nilai tempat"],["200 + 40 + 6","Pisahkan ratusan, puluhan, satuan"],["246","Gabungkan nilai tempat kembali"]);
+  return make(["3.475","Baca bilangan berdasarkan nilai tempat"],["3.000 + 400 + 70 + 5","Uraikan bilangan"],["3.475","Periksa hasil penguraian"]);
+ }
+ if(subject==="indo"){
+  if(/huruf|kata|kalimat|suku kata/.test(title))return grade<=2?make(["🔤","Kenali huruf B"],["🐝 B + U + K + U","Gabungkan bunyi huruf"],["📖 BUKU","Baca kata yang terbentuk"]):grade<=4?make(["📚","Amati kata dalam kalimat"],["🔎","Tentukan arti dan susunannya"],["✍️","Buat kalimat sendiri"]):make(["📄","Baca teks pendek"],["🔎","Perhatikan pilihan kata dan struktur"],["📝","Susun kalimat yang jelas dan efektif"]);
+  if(/sinonim|persamaan/.test(title))return make(["😊","Kata: gembira"],["🔁","Cari kata dengan arti mirip"],["😄 Senang","Gembira bersinonim dengan senang"]);
+  if(/antonim|lawan kata/.test(title))return make(["☀️ Siang","Amati kata pertama"],["↔️","Cari arti yang berlawanan"],["🌙 Malam","Siang berlawanan dengan malam"]);
+  if(/ide pokok|gagasan utama|paragraf/.test(title))return grade<=2?make(["📖","Dengarkan cerita singkat"],["👀","Cari hal yang paling sering dibahas"],["⭐","Sebutkan pokok ceritanya"]):grade<=4?make(["📄","Baca semua kalimat paragraf"],["🔎","Cari gagasan yang menaungi kalimat lain"],["⭐","Nyatakan ide pokok dengan singkat"]):make(["📚","Baca paragraf secara utuh"],["🧠","Bedakan gagasan utama dan pendukung"],["✍️","Tuliskan ide pokok dengan kata sendiri"]);
+  return grade<=2?make(["🖼️","Amati gambar cerita"],["👧","Kenali tokoh dan tempat"],["💬","Ceritakan kembali"]):grade<=4?make(["📖","Baca teks"],["🔍","Temukan informasi penting"],["📝","Buat ringkasan"]):make(["📚","Baca dan cermati teks"],["🧠","Analisis gagasan dan bukti"],["✍️","Simpulkan dengan alasan"]);
+ }
+ const base=(ANIMATION_STORIES[subject]||ANIMATION_STORIES.ipas)[chapter];
+ if(grade<=2)return base;
+ if(grade<=4)return base.map((x,i)=>({icon:x.icon,label:[`Amati konsep: ${x.label.toLowerCase()}`,`Hubungkan dengan contoh sehari-hari: ${x.label.toLowerCase()}`,`Jelaskan hasil pengamatan: ${x.label.toLowerCase()}`][i]}));
+ return base.map((x,i)=>({icon:x.icon,label:[`Identifikasi konsep utama: ${x.label.toLowerCase()}`,`Analisis hubungan atau proses: ${x.label.toLowerCase()}`,`Simpulkan dan jelaskan alasan: ${x.label.toLowerCase()}`][i]}));
+}
+function renderAnimationStep(){
+ const steps=animationSteps();
+ animationStepIndex=Math.max(0,Math.min(animationStepIndex,steps.length-1));
+ document.getElementById("animStep").textContent=`LANGKAH ${animationStepIndex+1} DARI ${steps.length}`;
+ document.getElementById("animScene").innerHTML=steps.map((item,i)=>{
+   const status=i===animationStepIndex?'active':i<animationStepIndex?'done':'future';
+   return `${i?'<span class="scene-arrow" aria-hidden="true">→</span>':''}<span class="scene-item ${status}" aria-label="${item.label}"><span class="scene-object">${item.icon}</span><span class="scene-label">${item.label}</span></span>`;
+ }).join("");
+ const headings=["Langkah 1: Amati contoh awal!","Langkah 2: Perhatikan perubahan!","Langkah 3: Coba simpulkan!"];
+ document.getElementById("animTitle").textContent=(state.subject==="math"&&state.chapter===0&&state.grade<=2)?["Langkah 1: Lihat benda awal!","Langkah 2: Benda tambahan datang!","Langkah 3: Ayo hitung semuanya!"][animationStepIndex]:( ["Langkah 1: Ayo mulai!","Langkah 2: Perhatikan perubahan","Langkah 3: Ayo amati hasilnya!"][animationStepIndex]||`Langkah ${animationStepIndex+1}`);
+ const item=steps[animationStepIndex];
+ const mathCaptions=["Amati jumlah atau bentuk yang ditampilkan pada langkah pertama.","Perhatikan perubahan atau hubungan pada contoh.","Gunakan petunjuk untuk mencoba menjawab sendiri."];
+ const captions=(state.subject==="math"&&state.chapter===0&&state.grade<=2)?["Lihat benda yang ada di awal. Ayo hitung bersama!","Perhatikan benda tambahan yang datang.","Sekarang hitung semua benda satu per satu. Coba jawab dulu!"]:[`Amati gambar ini: ${item.label}.`, `Sekarang perhatikan perubahan pada contoh: ${item.label}.`, `Ayo amati langkah ini: ${item.label.toLowerCase()}. Coba ceritakan kembali dengan kata-katamu sendiri.`];
+ document.getElementById("animCaption").textContent=captions[Math.min(animationStepIndex,2)];
+ document.getElementById("animProgress").style.width=((animationStepIndex+1)/steps.length*100)+"%";
+ document.getElementById("animNextBtn").disabled=animationStepIndex===steps.length-1;
+ document.getElementById("animNextBtn").textContent=animationStepIndex===steps.length-1?"Animasi selesai ✓":"Langkah berikutnya →";
+ document.getElementById("animPlayBtn").textContent=animationTimer?"⏸ Jeda animasi":"▶ Putar animasi";
+ document.querySelector(".animation-box").classList.toggle("is-playing",!!animationTimer);
+}
+function toggleAnimation(){
+ if(animationTimer){stopAnimation();renderAnimationStep();toast("Animasi dijeda. Tekan Putar untuk melanjutkan.");return;}
+ if(animationStepIndex>=animationSteps().length-1) animationStepIndex=0;
+ state.animPlayed[key(state.grade,state.subject,state.chapter)]=true;saveState();
+ document.getElementById("lessonProgress").style.width="40%";
+ playTone(740,.12);renderAnimationStep();speakAnimationStep();
+ animationTimer=setInterval(()=>{
+   if(animationStepIndex<animationSteps().length-1){animationStepIndex++;renderAnimationStep();playTone(620,.07);speakAnimationStep();}
+   else{stopAnimation();renderAnimationStep();toast("Hebat! Kamu sudah mengikuti semua langkah.");}
+ },4800);
+ renderAnimationStep();
+}
+function playAnimation(){toggleAnimation()}
+function nextAnimationStep(){
+ stopAnimation();
+ if(animationStepIndex<animationSteps().length-1){animationStepIndex++;renderAnimationStep();playTone(620,.08);speakAnimationStep();if(animationStepIndex===animationSteps().length-1){state.animPlayed[key(state.grade,state.subject,state.chapter)]=true;saveState();updateLessonProgress();}}
+}
+function replayLesson(){stopAnimation();animationStepIndex=0;renderAnimationStep();document.getElementById("animCaption").textContent="Tekan Putar animasi untuk mendengar dan melihat setiap langkah.";document.getElementById("animProgress").style.width="0%";toast("Animasi kembali ke langkah pertama.");}
+function beginPractice(){state.practice=true;startQuiz(true)}
+function beginFinalQuiz(){
+ const k=key(state.grade,state.subject,state.chapter);
+ if(!state.practiceDone[k]){toast("Selesaikan latihan terlebih dahulu, lalu buka kuis akhir.");return}
+ state.practice=false;startQuiz(false)
+}
+// Bank tambahan membuat soal dapat berubah pada setiap percobaan.
+const EXTRA_QUESTIONS={
+ math:[
+ ["Di meja ada 3 jeruk. Ibu menaruh 2 jeruk lagi. Berapa jumlah jeruk sekarang?",["4 jeruk","5 jeruk","6 jeruk","3 jeruk"],1,"3 jeruk + 2 jeruk = 5 jeruk."],
+ ["Beni punya 4 pisang. Ia mendapat 3 pisang lagi. Berapa pisang Beni sekarang?",["6 pisang","7 pisang","8 pisang","5 pisang"],1,"4 pisang + 3 pisang = 7 pisang."],
+ ["Ada 5 balon. Datang 2 balon lagi. Berapa balon semuanya?",["6 balon","7 balon","8 balon","3 balon"],1,"5 balon + 2 balon = 7 balon."],
+ ["Di piring ada 6 kue. Ibu menambah 2 kue. Berapa kue semuanya?",["7 kue","8 kue","9 kue","6 kue"],1,"6 kue + 2 kue = 8 kue."],
+ ["Ada 9 permen. Empat permen dimakan. Berapa permen yang tersisa?",["4 permen","5 permen","6 permen","13 permen"],1,"9 − 4 = 5 permen."],
+ ["Dina punya 8 stroberi. Ia memberikan 3 stroberi kepada adik. Berapa yang tersisa?",["4 stroberi","5 stroberi","6 stroberi","11 stroberi"],1,"8 − 3 = 5 stroberi."],
+ ["Ada 10 ikan di kolam. Tiga ikan dipindahkan. Berapa ikan yang tersisa?",["6 ikan","7 ikan","8 ikan","13 ikan"],1,"10 − 3 = 7 ikan."],
+ ["Di keranjang ada 2 apel. Ayah menambah 4 apel. Berapa apel semuanya?",["5 apel","6 apel","7 apel","8 apel"],1,"2 apel + 4 apel = 6 apel."],
+ ["Di taman ada 3 kupu-kupu. Datang 3 lagi. Berapa kupu-kupu sekarang?",["5 kupu-kupu","6 kupu-kupu","7 kupu-kupu","3 kupu-kupu"],1,"3 + 3 = 6 kupu-kupu."],
+ ["Riko punya 7 kelereng. Ia memberikan 2 kepada teman. Berapa kelereng tersisa?",["4 kelereng","5 kelereng","6 kelereng","9 kelereng"],1,"7 − 2 = 5 kelereng."],
+ ["Di rak ada 6 buku. Ibu menaruh 3 buku lagi. Jumlah buku sekarang ...",["8","9","10","3"],1,"6 + 3 = 9 buku."],
+ ["Rani memiliki 12 permen dan membagikan 4. Permen yang tersisa ...",["6","7","8","9"],2,"12 − 4 = 8 permen."],
+ ["Hasil dari 4 × 3 adalah ...",["7","12","16","9"],1,"4 × 3 berarti 4 kelompok yang masing-masing berisi 3."],
+ ["Satu dari dua bagian sama besar ditulis ...",["1/2","2/1","1/3","3/2"],0,"Satu dari dua bagian sama besar disebut setengah atau 1/2."],
+ ["Bangun datar yang memiliki 3 sisi adalah ...",["Persegi","Lingkaran","Segitiga","Persegi panjang"],2,"Segitiga memiliki tiga sisi."]
+ ],
+ indo:[
+ ["Kata yang tepat untuk melengkapi kalimat “Adik ... susu” adalah ...",["meminum","berlari","membaca","menyapu"],0,"Kata meminum sesuai dengan susu."],
+ ["Tanda baca di akhir kalimat tanya adalah ...",["Titik (.)","Koma (,)","Tanya (?)","Seru (!)"],2,"Kalimat tanya diakhiri tanda tanya."],
+ ["Sinonim kata “indah” adalah ...",["Cantik","Buruk","Kotor","Gelap"],0,"Indah memiliki arti mirip dengan cantik. Sinonim adalah kata yang memiliki arti sama atau hampir sama."],
+ ["Orang yang melakukan tindakan dalam cerita disebut ...",["Tokoh","Latar","Amanat","Judul"],0,"Tokoh adalah pelaku dalam cerita."],
+ ["Kalimat yang santun saat meminta bantuan adalah ...",["Cepat bantu aku!","Tolong bantu saya, ya.","Kamu harus bantu!","Diam dan bantu!"],1,"Meminta bantuan dengan kata tolong terdengar santun."]
+ ],
+ pancasila:[
+ ["Saat melihat teman berbeda agama beribadah, kita harus ...",["Mengganggu","Menghormati","Mengejek","Melarang"],1,"Kita perlu menghormati orang lain menjalankan ibadah."],
+ ["Contoh kewajiban siswa di sekolah adalah ...",["Mendapat nilai","Belajar dan menaati aturan","Mendapat perlindungan","Memilih teman"],1,"Siswa berkewajiban belajar dan menaati aturan sekolah."],
+ ["Ketika keputusan musyawarah sudah disepakati, kita sebaiknya ...",["Menerima dan melaksanakan","Marah","Memaksakan pendapat","Meninggalkan kelompok"],0,"Hasil musyawarah perlu dihormati bersama."],
+ ["Sikap terhadap teman yang berbeda suku adalah ...",["Tetap berteman","Menjauhi","Mengejek","Tidak mau bekerja sama"],0,"Perbedaan suku bukan alasan untuk membeda-bedakan teman."],
+ ["Menolong teman yang jatuh mencerminkan nilai ...",["Kemanusiaan","Keserakahan","Permusuhan","Kemalasan"],0,"Menolong sesama mencerminkan sikap kemanusiaan."]
+ ],
+ ipas:[
+ ["Bagian tumbuhan yang menyerap air dari tanah adalah ...",["Akar","Bunga","Buah","Daun"],0,"Akar menyerap air dan mineral dari tanah."],
+ ["Hewan yang memakan tumbuhan disebut ...",["Herbivor","Karnivor","Omnivor","Predator saja"],0,"Herbivor adalah hewan pemakan tumbuhan."],
+ ["Air yang berubah menjadi es mengalami proses ...",["Menguap","Membeku","Mencair","Mengembun"],1,"Membeku adalah perubahan cair menjadi padat."],
+ ["Sampah plastik sebaiknya ...",["Dibuang ke sungai","Dibakar sembarangan","Dikelola dan didaur ulang","Ditinggal di halaman"],2,"Sampah plastik perlu dikelola agar tidak mencemari lingkungan."],
+ ["Benda yang menghasilkan cahaya sendiri adalah ...",["Matahari","Cermin","Meja","Bulan"],0,"Matahari menghasilkan cahaya sendiri."]
+ ],
+ pjok:[
+ ["Gerakan berpindah tempat disebut gerak ...",["Lokomotor","Diam","Nonlokomotor saja","Istirahat"],0,"Berjalan dan berlari termasuk gerak lokomotor."],
+ ["Saat bermain bersama, kita harus ...",["Curang","Mematuhi aturan","Mendorong teman","Mengejek lawan"],1,"Aturan menjaga permainan tetap aman dan adil."],
+ ["Makanan bergizi membantu tubuh ...",["Tumbuh sehat","Mudah sakit","Tidak membutuhkan tidur","Tidak perlu air"],0,"Makanan bergizi mendukung pertumbuhan dan kesehatan."],
+ ["Setelah berolahraga, tubuh perlu ...",["Pendinginan dan minum","Langsung olahraga lagi tanpa henti","Menahan haus","Tidak beristirahat"],0,"Pendinginan dan minum membantu pemulihan tubuh."],
+ ["Saat menyeberang jalan, kita sebaiknya ...",["Berlari tanpa melihat","Memperhatikan keadaan dan menyeberang di tempat aman","Bermain di jalan","Menutup mata"],1,"Perhatikan lalu lintas dan gunakan tempat menyeberang yang aman."]
+ ],
+ seni:[
+ ["Campuran warna merah dan kuning menghasilkan warna ...",["Hijau","Jingga","Ungu","Biru"],1,"Merah dan kuning dapat menghasilkan jingga."],
+ ["Alat musik yang dimainkan dengan cara dipukul adalah ...",["Drum","Seruling","Gitar dipetik","Biola digesek"],0,"Drum dimainkan dengan cara dipukul."],
+ ["Garis yang melengkung banyak terlihat pada bentuk ...",["Gelombang","Kotak","Segitiga","Penggaris"],0,"Garis lengkung membentuk pola seperti gelombang."],
+ ["Bahan alam untuk membuat karya seni adalah ...",["Daun kering","Plastik baru saja","Layar ponsel","Kabel listrik"],0,"Daun kering dapat dimanfaatkan untuk karya seni."],
+ ["Ketika mengapresiasi karya teman, kita sebaiknya ...",["Memberi komentar sopan","Merusaknya","Menertawakan","Menyembunyikannya"],0,"Hargai karya orang lain dan sampaikan pendapat dengan sopan."]
+ ],
+ english:[
+ ["Bahasa Inggris dari “biru” adalah ...",["Blue","Red","Green","Black"],0,"Blue berarti biru."],
+ ["Sapaan yang tepat pada malam hari adalah ...",["Good night","Good morning","Good afternoon","Hello morning"],0,"Good night digunakan pada malam hari, terutama saat berpisah atau akan tidur."],
+ ["“Please” berarti ...",["Tolong/silakan","Selamat tinggal","Merah","Terima kasih"],0,"Please digunakan untuk meminta sesuatu dengan sopan."],
+ ["Bahasa Inggris dari “kucing” adalah ...",["Cat","Dog","Bird","Fish"],0,"Cat berarti kucing."],
+ ["Jawaban yang tepat untuk “How are you?” adalah ...",["I am fine, thank you.","My name is blue.","It is a pencil.","Good night color."],0,"I am fine, thank you berarti saya baik, terima kasih."]
+ ],
+ agama:[
+ ["Saat berjanji kepada teman, kita sebaiknya ...",["Berusaha menepatinya","Melupakannya","Berbohong","Menyalahkan teman"],0,"Menepati janji menunjukkan tanggung jawab."],
+ ["Ketika menerima bantuan, kita sebaiknya ...",["Mengucapkan terima kasih","Diam sambil mengejek","Marah","Pergi tanpa peduli"],0,"Berterima kasih menunjukkan penghargaan."],
+ ["Jika melihat teman kesusahan, kita dapat ...",["Membantu sesuai kemampuan","Menertawakan","Mengabaikan selalu","Menambah kesulitannya"],0,"Kepedulian dapat diwujudkan dengan membantu."],
+ ["Disiplin di sekolah ditunjukkan dengan ...",["Datang tepat waktu","Sering terlambat","Tidak mengerjakan tugas","Mengganggu kelas"],0,"Datang tepat waktu merupakan contoh disiplin."],
+ ["Kejujuran berarti ...",["Berkata sesuai kenyataan","Mengarang cerita untuk menipu","Menyembunyikan semua fakta","Menuduh tanpa bukti"],0,"Jujur berarti berkata dan bertindak sesuai kenyataan."]
+ ],
+ lokal:[
+ ["Cara menjaga permainan tradisional agar tetap dikenal adalah ...",["Mempelajarinya dan bermain bersama","Melupakannya","Mengejeknya","Melarang semua orang"],0,"Mempelajari dan mengenalkan permainan tradisional membantu melestarikannya."],
+ ["Jika berkunjung ke tempat budaya, kita harus ...",["Menjaga kebersihan dan menghormati aturan","Mencoret dinding","Merusak benda","Membuang sampah"],0,"Situs budaya perlu dijaga dan dihormati."],
+ ["Kerajinan daerah dapat dibuat dari ...",["Bahan yang tersedia di sekitar","Hanya benda langit","Awan","Cahaya saja"],0,"Banyak kerajinan memanfaatkan bahan lokal."],
+ ["Saat bertanya tentang bahasa daerah, gunakan sikap ...",["Sopan dan ingin belajar","Mengejek","Memaksa","Merendahkan"],0,"Bertanya dengan sopan menunjukkan penghargaan."],
+ ["Menanam pohon di lingkungan merupakan tindakan ...",["Menjaga alam","Mencemari air","Merusak tanah","Membuang sampah"],0,"Pohon membantu menjaga lingkungan."]
+ ]
+};
+// Variasi tambahan: materi tetap sama, tetapi konteks, objek, dan kalimat soal berubah.
+const MORE_QUESTIONS={
+ math:[
+ ["Ada 4 jeruk di piring. Ayah menaruh 3 jeruk lagi. Berapa semuanya?",["6 jeruk","7 jeruk","8 jeruk","9 jeruk"],1,"4 + 3 = 7 jeruk."],
+ ["Mira punya 9 biskuit. Ia memberikan 2 kepada adik. Berapa sisanya?",["6 biskuit","7 biskuit","8 biskuit","11 biskuit"],1,"9 − 2 = 7 biskuit."],
+ ["Ada 5 kupu-kupu. Datang 4 lagi. Berapa jumlahnya?",["8 kupu-kupu","9 kupu-kupu","10 kupu-kupu","7 kupu-kupu"],1,"5 + 4 = 9 kupu-kupu."],
+ ["Di kotak ada 11 kelereng. Tiga kelereng diambil. Berapa sisanya?",["7 kelereng","8 kelereng","9 kelereng","14 kelereng"],1,"11 − 3 = 8 kelereng."],
+ ["Ada 2 piring. Setiap piring berisi 4 donat. Berapa donat semuanya?",["6 donat","8 donat","4 donat","10 donat"],1,"2 kelompok × 4 donat = 8 donat."]
+ ],
+ indo:[
+ ["Lawan kata ‘panas’ adalah ...",["Hangat","Dingin","Terang","Kering"],1,"Dingin adalah lawan kata panas."],
+ ["Sinonim kata ‘gembira’ adalah ...",["Sedih","Marah","Senang","Takut"],2,"Gembira dan senang memiliki arti yang sama atau hampir sama."],
+ ["Kalimat yang diakhiri tanda seru adalah ...",["Siapa namamu?","Saya makan nasi.","Awas, hati-hati!","Ibu pergi ke pasar."],2,"Tanda seru dapat dipakai untuk seruan atau peringatan."],
+ ["Kata yang tepat: ‘Kakak ... buku di perpustakaan.’",["memasak","membaca","berenang","menyapu"],1,"Kata membaca sesuai dengan kegiatan menggunakan buku."],
+ ["Kalimat ajakan yang santun adalah ...",["Ayo, kita merapikan kelas bersama!","Kamu saja yang kerja!","Jangan ikut!","Cepat diam!"],0,"Kata ‘ayo’ dapat digunakan untuk mengajak."],
+ ["Sinonim kata ‘cepat’ adalah ...",["Lambat","Lekas","Diam","Jauh"],1,"Cepat dan lekas memiliki arti yang mirip."]
+ ],
+ pancasila:[
+ ["Saat teman berbicara saat musyawarah, kita sebaiknya ...",["Mendengarkan","Memotong terus","Menertawakan","Pergi"],0,"Mendengarkan pendapat adalah sikap menghargai."],
+ ["Contoh sikap gotong royong di kelas adalah ...",["Membersihkan kelas bersama","Menyuruh satu teman saja","Membuang sampah sembarangan","Menyembunyikan alat"],0,"Gotong royong berarti bekerja bersama untuk tujuan baik."],
+ ["Jika menemukan barang milik teman, kita sebaiknya ...",["Menyimpannya diam-diam","Mengembalikannya","Membuangnya","Menyembunyikannya"],1,"Mengembalikan barang menunjukkan kejujuran dan tanggung jawab."],
+ ["Walaupun berbeda pendapat, kita harus ...",["Tetap saling menghormati","Bertengkar","Mengejek","Memaksa"],0,"Perbedaan pendapat disikapi dengan hormat."]
+ ],
+ ipas:[
+ ["Bagian tumbuhan yang biasanya berwarna hijau dan membantu membuat makanan adalah ...",["Daun","Akar","Batu","Tanah"],0,"Daun membantu tumbuhan membuat makanan dengan bantuan cahaya matahari."],
+ ["Hewan yang berkembang biak dengan bertelur adalah ...",["Ayam","Kucing","Kambing","Sapi"],0,"Ayam berkembang biak dengan bertelur."],
+ ["Saat es dibiarkan di tempat hangat, es akan ...",["Membeku","Mencair","Menjadi batu","Menghilang seketika"],1,"Es mencair dari benda padat menjadi air."],
+ ["Sumber energi utama bagi Bumi adalah ...",["Matahari","Meja","Buku","Pasir"],0,"Matahari memberikan cahaya dan panas bagi Bumi."],
+ ["Agar lingkungan bersih, sampah sebaiknya ...",["Dibuang pada tempatnya","Dilempar ke sungai","Ditinggal di jalan","Dimasukkan ke selokan"],0,"Buang sampah pada tempatnya agar lingkungan tidak tercemar."]
+ ],
+ pjok:[
+ ["Sebelum olahraga, kita sebaiknya melakukan ...",["Pemanasan","Langsung tidur","Makan sebanyak-banyaknya","Duduk sepanjang waktu"],0,"Pemanasan membantu menyiapkan tubuh sebelum bergerak."],
+ ["Gerakan menekuk dan memutar badan di tempat termasuk gerak ...",["Nonlokomotor","Lokomotor","Berlari","Berjalan jauh"],0,"Gerak nonlokomotor dilakukan tanpa berpindah tempat."],
+ ["Agar gigi sehat, kita perlu ...",["Menyikat gigi","Makan permen terus","Tidak minum air","Tidak pernah membersihkan gigi"],0,"Menyikat gigi membantu menjaga kebersihan mulut."],
+ ["Saat teman terjatuh ketika bermain, kita sebaiknya ...",["Menolong dan memberi tahu guru jika perlu","Menertawakan","Meninggalkannya","Mendorong lagi"],0,"Peduli keselamatan teman merupakan sikap yang baik."]
+ ],
+ seni:[
+ ["Warna langit cerah pada siang hari sering tampak ...",["Biru","Hitam pekat","Merah muda saja","Cokelat"],0,"Biru sering digunakan untuk menggambarkan langit cerah."],
+ ["Alat untuk mengoleskan cat pada kertas adalah ...",["Kuas","Sendok makan saja","Penghapus","Penggaris saja"],0,"Kuas digunakan untuk mengoleskan cat."],
+ ["Bunyi yang teratur dan berulang dapat membentuk ...",["Irama","Warna","Garis","Bayangan"],0,"Irama adalah susunan bunyi yang teratur."],
+ ["Saat membuat karya, kita sebaiknya ...",["Menggunakan alat dengan aman dan menghargai karya teman","Merusak karya teman","Membuang semua bahan","Mengejek hasil teman"],0,"Berkarya perlu aman dan menghargai orang lain."]
+ ],
+ english:[
+ ["Bahasa Inggris dari ‘anjing’ adalah ...",["Dog","Cat","Bird","Fish"],0,"Dog berarti anjing."],
+ ["Bahasa Inggris dari ‘merah’ adalah ...",["Green","Blue","Red","Yellow"],2,"Red berarti merah."],
+ ["‘Thank you’ digunakan untuk mengucapkan ...",["Terima kasih","Selamat pagi","Sampai jumpa","Maaf"],0,"Thank you berarti terima kasih."],
+ ["Jika bertemu teman pada pagi hari, kita dapat berkata ...",["Good morning","Good night","Good bye","Good evening"],0,"Good morning berarti selamat pagi."],
+ ["Bahasa Inggris dari ‘buku’ adalah ...",["Book","Ball","Bag","Bird"],0,"Book berarti buku."]
+ ],
+ agama:[
+ ["Saat melakukan kesalahan, sikap yang baik adalah ...",["Mengakui dan meminta maaf","Menyalahkan teman","Berbohong","Melarikan diri"],0,"Mengakui kesalahan menunjukkan kejujuran."],
+ ["Menjaga kebersihan merupakan contoh sikap ...",["Bertanggung jawab","Acuh tak acuh","Malas","Sombong"],0,"Menjaga kebersihan adalah bentuk tanggung jawab."],
+ ["Ketika berdoa atau beribadah, kita sebaiknya bersikap ...",["Tertib dan hormat","Bermain-main mengganggu","Mengejek","Berteriak kepada teman"],0,"Beribadah dilakukan dengan sikap hormat sesuai ajaran masing-masing."],
+ ["Jika teman berbagi bekal, kita sebaiknya ...",["Berterima kasih","Mengejek","Merebut semuanya","Membuang bekal"],0,"Berterima kasih menunjukkan rasa syukur dan penghargaan."]
+ ],
+ lokal:[
+ ["Bahasa daerah sebaiknya kita ...",["Pelajari dan hormati","Ejek","Lupakan dengan sengaja","Larangkan semua orang"],0,"Bahasa daerah merupakan bagian dari kekayaan budaya."],
+ ["Saat mengunjungi pantai, kita harus ...",["Menjaga kebersihan","Meninggalkan sampah","Merusak terumbu karang","Mengganggu hewan"],0,"Menjaga kebersihan membantu melindungi alam."],
+ ["Permainan tradisional dapat dilestarikan dengan cara ...",["Memainkannya bersama teman","Mengejeknya","Merusak alatnya","Melarang anak belajar"],0,"Memainkan dan mengenalkan permainan membantu melestarikannya."],
+ ["Saat bertamu ke rumah orang, kita sebaiknya ...",["Mengucapkan salam dan bersikap sopan","Masuk tanpa izin","Berteriak-teriak","Mengacak barang"],0,"Bersikap sopan menunjukkan penghormatan kepada tuan rumah."]
+ ]
+};
+for(const sid of Object.keys(MORE_QUESTIONS)){EXTRA_QUESTIONS[sid]=[...(EXTRA_QUESTIONS[sid]||[]),...MORE_QUESTIONS[sid]];}
+
+function shuffleArray(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]]}return arr}
+function startQuiz(practice){
+ state.practice=practice;const l=currentLesson();
+ const bank=l.questions.map((q,i)=>({q:q[0],options:q[1].slice(),correct:q[2],explain:q[3],original:i}));
+ // Simpan riwayat per kelas, mapel, dan bab agar percobaan ulang mengambil soal yang belum muncul.
+ const lessonKey=`${state.grade}_${state.subject}_${state.chapter}`;
+ state._seenQuestionsByLesson=state._seenQuestionsByLesson||{};
+ let seen=state._seenQuestionsByLesson[lessonKey]||[];
+ let fresh=bank.filter(item=>!seen.includes(item.q));
+ // Setelah semua soal dalam bab pernah muncul, mulai putaran baru dengan kombinasi acak.
+ if(fresh.length===0){seen=[];fresh=bank.slice();}
+ // Ambil maksimal 3 soal per putaran supaya tersedia pilihan berbeda pada percobaan berikutnya.
+ const count=Math.min(3,fresh.length);
+ const chosen=shuffleArray(fresh).slice(0,count);
+ state.questions=chosen.map(item=>{
+   const correctText=item.options[item.correct];
+   const options=shuffleArray(item.options.slice());
+   return {...item,options,correct:options.indexOf(correctText)};
+ });
+ state._seenQuestionsByLesson[lessonKey]=[...seen,...chosen.map(item=>item.q)];
+ saveState();state.qIndex=0;state.roundScore=0;state.answers=[];state.selected=null;state.answered=false;renderQuestion();showScreen("quiz")
+}
+function getMathStory(qText){
+ const t=qText.toLowerCase();
+ const nums=[...t.matchAll(/\b(\d{1,2})\b/g)].map(m=>Number(m[1]));
+ if(nums.length<2)return null;
+ let op=null;
+ if(/ditambah|menambah|tambahkan|bertambah|\+|lagi|mendapat/.test(t))op='add';
+ else if(/tersisa|terbang|diambil|membagikan|berkurang|dikurangi|kurang|\-|pergi/.test(t))op='subtract';
+ else if(/\bx\b|×|kali|kelompok|masing-masing|perkalian/.test(t))op='multiply';
+ if(!op)return null;
+ let a=nums[0],b=nums[1];
+ // Jangan menampilkan kelompok benda yang terlalu banyak pada layar kecil.
+ if(a<1||b<1||a>20||b>20)return null;
+ let emoji='🍎',noun='benda';
+ const things=[[/apel/,'🍎','apel'],[/buku/,'📚','buku'],[/permen/,'🍬','permen'],[/balon/,'🎈','balon'],[/pensil/,'✏️','pensil'],[/jeruk/,'🍊','jeruk'],[/kue/,'🧁','kue'],[/bola/,'⚽','bola'],[/bunga/,'🌼','bunga'],[/ikan/,'🐟','ikan'],[/stiker/,'⭐','stiker'],[/kelereng/,'🔵','kelereng'],[/siswa|anak|teman/,'🧒','anak'],[/ayam/,'🐥','ayam'],[/mobil/,'🚗','mobil'],[/pisang/,'🍌','pisang'],[/pensil/,'✏️','pensil']];
+ for(const [re,e,n] of things){if(re.test(t)){emoji=e;noun=n;break}}
+ if(op==='multiply'){
+  // Pertanyaan perkalian sederhana: tampilkan dua kelompok untuk memahami pengulangan.
+  const total=a*b;if(total>20)return null;
+  return {a,b,total,emoji,noun,op,title:`Ada ${a} kelompok, setiap kelompok berisi ${b} ${noun}.`,caption:`Kita hitung ${a} kelompok berisi ${b}: ${Array.from({length:a},()=>b).join(' + ')} = ${total}.`};
+ }
+ const total=op==='add'?a+b:Math.max(0,a-b);if(total>20)return null;
+ return {a,b,total,emoji,noun,op,title:op==='add'?`Ada ${a} ${noun}, lalu datang ${b} lagi.`:`Ada ${a} ${noun}, lalu ${b} ${op==='subtract'?'diambil/pergi':'berkurang'}.`,caption:op==='add'?`${a} ${noun} + ${b} ${noun} = ${total} ${noun}. Yuk hitung semuanya!`:`${a} ${noun} − ${b} ${noun} = ${total} ${noun} tersisa.`};
+}
+function objectIcons(count,emoji,extraClass=''){
+ return Array.from({length:count},(_,i)=>`<span class="math-item" style="--delay:${Math.min(i*.08,.7)}s">${emoji}</span>`).join('');
+}
+function playMathStory(){
+ const visual=document.getElementById('questionVisual');const story=visual._mathStory;if(!story)return;
+ if(visual._storyTimers)visual._storyTimers.forEach(clearTimeout);visual._storyTimers=[];
+ const left=document.getElementById('mathLeft'),right=document.getElementById('mathRight'),result=document.getElementById('mathResult'),caption=document.getElementById('mathCaption');
+ if(!left||!right||!result||!caption)return;
+ visual._answerRevealed=false;
+ left.innerHTML=`${objectIcons(story.a,story.emoji)}<span class="math-group-label">Awalnya: ${story.a}</span>`;
+ right.innerHTML=`<span class="math-group-label">${story.op==='add'?'Akan datang':story.op==='subtract'?'Akan diambil':'Kelompok tambahan'}: ${story.b}</span>`;
+ right.classList.add('incoming');result.innerHTML=`<span class="math-group-label">🤔 Berapa hasilnya?</span>`;result.classList.remove('result-group');
+ caption.textContent=`Langkah 1: hitung ${story.a} ${story.noun} yang ada.`;
+ const timers=visual._storyTimers;
+ timers.push(setTimeout(()=>{
+   if(story.op==='subtract'){
+     const items=left.querySelectorAll('.math-item');
+     for(let i=Math.max(0,story.a-story.b);i<items.length;i++)items[i].classList.add('moving-out');
+     right.innerHTML=objectIcons(story.b,story.emoji)+`<span class="math-group-label">${story.b} diambil</span>`;
+     right.classList.add('incoming');
+     caption.textContent=`Langkah 2: ${story.b} ${story.noun} bergerak keluar. Sekarang pilih berapa yang tersisa!`;
+   } else {
+     right.innerHTML=objectIcons(story.b,story.emoji)+`<span class="math-group-label">${story.op==='add'?'Datang lagi':`Isi tiap kelompok: ${story.b}`}</span>`;
+     caption.textContent=story.op==='add'?`Langkah 2: ${story.b} ${story.noun} datang. Berapa jumlah semuanya?`:`Langkah 2: kelompokkan benda, lalu pilih hasilnya!`;
+   }
+ },1400));
+ timers.push(setTimeout(()=>{
+   if(story.op==='subtract'){
+     // Keep the remaining count hidden until the learner submits an answer.
+     caption.textContent=`Benda yang diambil sudah berpindah. Coba jawab dulu, ya!`;
+   } else {
+     caption.textContent=`Coba hitung bendanya, lalu pilih jawabanmu di bawah.`;
+   }
+ },3100));
+}
+function revealMathAnswer(){
+ const visual=document.getElementById('questionVisual');const story=visual&&visual._mathStory;if(!story||visual._answerRevealed)return;
+ visual._answerRevealed=true;
+ const left=document.getElementById('mathLeft'),right=document.getElementById('mathRight'),result=document.getElementById('mathResult'),caption=document.getElementById('mathCaption');
+ if(!left||!right||!result||!caption)return;
+ if(visual._storyTimers)visual._storyTimers.forEach(clearTimeout);visual._storyTimers=[];
+ if(story.op==='subtract')left.innerHTML=objectIcons(story.total,story.emoji)+`<span class="math-group-label">Tersisa: ${story.total}</span>`;
+ else left.innerHTML=objectIcons(story.a,story.emoji)+`<span class="math-group-label">Awalnya: ${story.a}</span>`;
+ if(story.op==='add')right.innerHTML=objectIcons(story.b,story.emoji)+`<span class="math-group-label">Ditambah: ${story.b}</span>`;
+ result.innerHTML=objectIcons(story.total,story.emoji)+`<span class="math-group-label">${story.op==='subtract'?'Jawaban benar: ':'Total: '}${story.total} ${story.noun}${story.op==='subtract'?' tersisa':''}</span>`;result.classList.add('result-group');
+ caption.textContent=`🎉 ${story.op==='subtract'?`${story.a} − ${story.b} = ${story.total}. Ada ${story.total} ${story.noun} tersisa.`:story.op==='add'?`${story.a} + ${story.b} = ${story.total}. Jumlahnya ${story.total} ${story.noun}.`:`${story.a} × ${story.b} = ${story.total}.`}`;
+}
+function quizMascotSVG(){
+ return `<svg class="quiz-mascot" viewBox="0 0 150 205" role="img" aria-label="Tokoh anak sekolah melambaikan tangan">
+ <ellipse cx="75" cy="195" rx="42" ry="7" fill="#7e9ac52b"/>
+ <!-- tas --> <path d="M37 100 Q20 108 26 151 L43 158 L52 112Z" fill="#ffbd45" stroke="#9a6223" stroke-width="3"/>
+ <!-- kaki dan sepatu --> <path d="M57 151 L55 179 Q53 187 43 187 L35 187 Q29 184 35 178 L46 172 L45 151Z" fill="#f4c6a0" stroke="#6d493d" stroke-width="2.5"/><path d="M89 151 L93 177 Q95 182 105 182 L115 182 Q121 187 114 190 L92 190 Q84 188 83 180 L78 153Z" fill="#f4c6a0" stroke="#6d493d" stroke-width="2.5"/><path d="M33 183 Q45 178 53 185 L54 191 L30 191 Q26 187 33 183Z" fill="#ffffff" stroke="#415578" stroke-width="2.5"/><path d="M93 185 Q104 180 116 185 Q121 190 114 193 L92 193Z" fill="#ffffff" stroke="#415578" stroke-width="2.5"/>
+ <!-- tubuh seragam --> <path d="M48 95 Q72 86 96 96 L103 150 Q76 160 47 150Z" fill="#3b83f6" stroke="#2355aa" stroke-width="3"/><path d="M65 96 L77 111 L88 96 L84 137 L72 145 L66 136Z" fill="#fff"/><path d="M72 111 L81 111 L78 133 L74 133Z" fill="#f04f68"/><path d="M48 145 Q75 153 102 145 L106 160 Q77 168 44 160Z" fill="#ffcf59" stroke="#d99b24" stroke-width="2.5"/>
+ <!-- tangan --> <path d="M49 104 Q36 110 28 94 L21 79" fill="none" stroke="#f4c6a0" stroke-width="12" stroke-linecap="round"/><path d="M97 104 Q111 111 120 96 L127 84" fill="none" stroke="#f4c6a0" stroke-width="12" stroke-linecap="round"/><g class="wave-arm"><path d="M124 87 Q129 76 128 65" fill="none" stroke="#f4c6a0" stroke-width="12" stroke-linecap="round"/><path d="M127 66 L123 54 M128 66 L135 55 M127 66 L138 64" stroke="#f4c6a0" stroke-width="7" stroke-linecap="round"/></g>
+ <!-- leher dan wajah --> <path d="M64 76 L64 91 Q75 101 87 90 L86 75Z" fill="#eeb28d"/><ellipse cx="75" cy="51" rx="38" ry="42" fill="#f5c6a1" stroke="#7a4b3e" stroke-width="2.5"/>
+ <!-- rambut --> <path d="M37 51 Q25 22 48 12 Q76 -1 100 15 Q124 29 112 57 L104 39 Q92 43 84 28 Q69 44 45 39Z" fill="#382b2b" stroke="#211e28" stroke-width="3"/><path d="M39 46 Q30 62 43 74 L45 49Z M106 41 Q119 56 107 72 L102 49Z" fill="#382b2b"/>
+ <!-- mata, alis, senyum --> <ellipse cx="61" cy="51" rx="6" ry="9" fill="#fff"/><ellipse class="blink" cx="62" cy="52" rx="3.6" ry="6" fill="#292a38"/><circle cx="63" cy="49" r="1.8" fill="#fff"/><ellipse cx="89" cy="51" rx="6" ry="9" fill="#fff"/><ellipse class="blink" cx="90" cy="52" rx="3.6" ry="6" fill="#292a38"/><circle cx="91" cy="49" r="1.8" fill="#fff"/><path d="M53 39 Q61 34 67 39 M82 39 Q90 34 97 39" fill="none" stroke="#382b2b" stroke-width="3" stroke-linecap="round"/><ellipse cx="49" cy="63" rx="7" ry="4" fill="#f49b9b" opacity=".7"/><ellipse cx="101" cy="63" rx="7" ry="4" fill="#f49b9b" opacity=".7"/><path d="M65 67 Q76 80 88 67 Q77 88 65 67Z" fill="#fff" stroke="#a64e4e" stroke-width="2"/>
+ </svg>`;
+}
+function quizMascotRow(message,submessage){return `<div class="quiz-mascot-row">${quizMascotSVG()}<div class="quiz-mascot-bubble">${message}<small>${submessage}</small></div></div>`}
+
+function getConceptMiniLesson(qText){
+ const t=qText.toLowerCase();
+ const card=(title,definition,example,emoji="📚")=>`<div class="callout concept-mini-lesson" style="text-align:left;margin:10px 0;border-left:5px solid #39b982;background:#effbf5;padding:14px;border-radius:14px"><h3 style="margin:0 0 7px;color:#176b4b">${emoji} ${title}</h3><p style="margin:0 0 7px">${definition}</p><div style="background:white;border-radius:10px;padding:9px"><b>Contoh:</b> ${example}</div><p style="margin:8px 0 0;font-size:13px">Sekarang coba soal berikutnya dengan contoh yang berbeda, ya!</p></div>`;
+ if(state.subject==="indo"&&/sinonim/.test(t))return card("Yuk, kenali sinonim!","Sinonim adalah dua kata yang artinya sama atau hampir sama. Kita pahami dulu, lalu coba kata yang berbeda.","pintar ↔ pandai; senang ↔ gembira; indah ↔ elok; cepat ↔ lekas.");
+ if(state.subject==="indo"&&/antonim|lawan kata/.test(t))return card("Yuk, kenali antonim!","Antonim adalah dua kata yang artinya berlawanan. Perhatikan beberapa contoh, bukan hanya satu pasangan.","siang ↔ malam; tinggi ↔ rendah; masuk ↔ keluar; rajin ↔ malas; dekat ↔ jauh; bersih ↔ kotor.","↔️");
+ if(state.subject==="indo"&&/tanda baca|kalimat tanya|tanda tanya/.test(t))return card("Tanda baca membantu kita membaca","Tanda tanya (?) dipakai di akhir kalimat pertanyaan. Titik (.) biasanya mengakhiri kalimat berita. Koma (,) memberi jeda dalam kalimat.","Siapa namamu? Saya bernama Siti. Ibu membeli apel, jeruk, dan pisang.","❓");
+ if(state.subject==="indo"&&/ide pokok|gagasan utama|paragraf/.test(t))return card("Yuk, cari ide pokok!","Ide pokok adalah gagasan utama yang dibahas dalam paragraf. Baca beberapa kalimat, lalu pikirkan hal yang paling banyak dibicarakan.","Contoh paragraf: ‘Mira rajin merawat tanaman. Ia menyiram bunga setiap pagi. Tanamannya tumbuh subur.’ Ide pokoknya: Mira rajin merawat tanaman.","📖");
+ if(state.subject==="indo"&&/tokoh|latar|amanat/.test(t))return card("Bagian cerita","Tokoh adalah pelaku cerita, latar adalah tempat/waktu, dan amanat adalah pesan cerita.","Dalam cerita, Siti membantu temannya. Siti adalah tokoh.","📖");
+ if(state.subject==="math"&&/pecahan|\b\d+\s*\/\s*\d+|per empat|per tiga|setengah|seperempat|sepertiga/.test(t))return card("Memahami pecahan","Pecahan menunjukkan bagian dari satu benda utuh yang dibagi menjadi beberapa bagian sama besar. Angka di atas garis menunjukkan bagian yang diambil; angka di bawah menunjukkan jumlah seluruh bagian yang sama besar.","Bayangkan satu pizza dibagi menjadi 4 potong sama besar. Jika 3 potong diarsir, pecahannya 3/4 dan dibaca tiga per empat. 🍕","🍕");
+ if(state.subject==="math"&&/perbandingan|rasio/.test(t))return card("Memahami perbandingan","Perbandingan menunjukkan hubungan banyaknya dua kelompok. Pastikan membandingkan benda atau satuan yang sejenis.","Ada 2 pensil merah dan 3 pensil biru. Perbandingan merah terhadap biru adalah 2 : 3.","⚖️");
+ if(state.subject==="math"&&/keliling|luas|persegi|persegi panjang|segitiga|sudut|bangun datar/.test(t))return card("Memahami bangun datar","Amati bentuk, sisi, dan ukurannya. Keliling adalah jumlah panjang seluruh sisi, sedangkan luas mengukur daerah di dalam bangun.","Persegi dengan sisi 4 cm memiliki keliling 4 + 4 + 4 + 4 = 16 cm dan luas 4 × 4 = 16 cm².","📐");
+ if(state.subject==="math"&&/volume|kubus|balok|bangun ruang/.test(t))return card("Memahami bangun ruang","Bangun ruang memiliki isi. Volume menyatakan banyak ruang yang ditempati, sedangkan sisi dan rusuk membantu kita mengenali bentuknya.","Kubus dengan rusuk 3 cm memiliki volume 3 × 3 × 3 = 27 cm³.","🧊");
+ if(state.subject==="math"&&/desimal|koma|nilai tempat|ratusan|puluhan|satuan/.test(t))return card("Memahami nilai tempat","Nilai sebuah angka bergantung pada posisinya. Pada bilangan desimal, angka di sebelah kanan koma menunjukkan persepuluhan, perseratusan, dan seterusnya.","Pada 3,5, angka 3 berarti 3 satuan dan angka 5 berarti 5 persepuluhan.","🔢");
+ if(state.subject==="math"&&/pembagian|dibagi|bagi|\:/.test(t))return card("Pembagian berarti membagi sama rata","Pembagian digunakan saat suatu jumlah dibagikan ke beberapa kelompok dengan sama banyak.","12 biskuit dibagi rata kepada 3 anak. Setiap anak mendapat 12 ÷ 3 = 4 biskuit.","🍪");
+ if(state.subject==="math"&&/perkalian|dikali|kali|×/.test(t))return card("Perkalian adalah penjumlahan berulang","Perkalian membantu menghitung beberapa kelompok yang masing-masing memiliki jumlah sama.","Ada 4 piring, setiap piring berisi 3 kue. Jumlahnya 4 × 3 = 12 kue.","🧁");
+ if(state.subject==="math"&&/diskon|persen|%|harga setelah/.test(t))return card("💸 Memahami diskon dan persen","Persen berarti bagian dari 100. Diskon adalah potongan harga, jadi hitung dulu besar potongannya, lalu kurangi dari harga awal. Contoh berbeda: harga Rp50.000 diskon 10% berarti potongan 10/100 × Rp50.000 = Rp5.000; harga yang dibayar Rp45.000.","🏷️ Harga awal Rp50.000 → potongan Rp5.000 → bayar Rp45.000. Ingat: harga akhir = harga awal − potongan.","💸");
+ if(state.subject==="math"&&/ditambah|jumlah|semuanya|penjumlahan|\+/.test(t))return card("Penjumlahan berarti menggabungkan","Kita menggabungkan dua kelompok benda untuk mengetahui jumlah semuanya.","🍊🍊🍊 + 🍊🍊 = hitung semua jeruk.","🍊");
+ if(state.subject==="math"&&/tersisa|diambil|dikurangi|pengurangan|−/.test(t))return card("Pengurangan berarti mengambil sebagian","Mulai dari jumlah awal, lalu keluarkan benda yang diambil dan hitung sisanya.","🍬🍬🍬🍬🍬 − 🍬🍬 = hitung permen yang masih ada.","🍬");
+ if(state.subject==="ipas"&&/akar|daun|tumbuhan|fotosint/.test(t))return card("Kenali bagian tumbuhan","Akar menyerap air, batang membantu menopang, dan daun membantu tumbuhan membuat makanan.","Amati tumbuhan di sekitar rumah.","🌱");
+ if(state.subject==="ipas"&&/membeku|mencair|menguap|mengembun|es/.test(t))return card("Air dapat berubah wujud","Es mencair menjadi air. Air yang membeku menjadi es.","🧊 es → 💧 air saat mencair.","💧");
+ if(state.subject==="pancasila"&&/musyawarah/.test(t))return card("Apa itu musyawarah?","Musyawarah adalah berdiskusi untuk mencari keputusan bersama.","Dengarkan pendapat teman, lalu sepakati keputusan bersama.","🤝");
+ if(state.subject==="pancasila"&&/hak|kewajiban/.test(t))return card("Hak dan kewajiban","Hak adalah sesuatu yang kita terima. Kewajiban adalah sesuatu yang harus kita lakukan.","Siswa berhak belajar dan berkewajiban menaati aturan.","🏫");
+ if(state.subject==="english"&&/bahasa inggris|berarti|good morning|thank you|please|cat|dog|blue|red/.test(t))return card("Belajar kata bahasa Inggris","Perhatikan kata, dengarkan pengucapannya, lalu hubungkan dengan artinya.","cat = kucing; dog = anjing; thank you = terima kasih.","🔤");
+ if(state.subject==="seni"&&/warna|merah|kuning|biru|campuran/.test(t))return card("Ayo mengenal warna","Warna dapat diamati dan beberapa warna cat bisa dicampur untuk menghasilkan warna lain.","Merah + kuning = jingga.","🎨");
+ if(state.subject==="pjok"&&/lokomotor|nonlokomotor|pemanasan|olahraga/.test(t))return card("Gerak tubuh yang sehat","Pemanasan dilakukan sebelum olahraga. Gerak lokomotor membuat tubuh berpindah tempat.","Berjalan dan berlari adalah gerak lokomotor.","🏃");
+ if(state.subject==="agama"&&/jujur|kejujuran|disiplin|tanggung jawab|janji/.test(t))return card("Belajar kebiasaan baik","Jujur berarti berkata sesuai kenyataan. Tanggung jawab berarti melaksanakan tugas dengan baik.","Jika melakukan kesalahan, akui dan perbaiki.","💛");
+ if(state.subject==="lokal"&&/budaya|tradisional|daerah|lingkungan/.test(t))return card("Kenali budaya dan lingkungan","Budaya dan lingkungan perlu dihargai serta dijaga bersama.","Kenalkan permainan daerah dan buang sampah pada tempatnya.","🏝️");
+ // Setiap mata pelajaran tetap mendapat pengantar konsep singkat bila soal tidak cocok dengan pola khusus di atas.
+ if(state.subject==="pancasila")return card("Pikirkan sikap yang baik","Pilih tindakan yang menghargai orang lain, adil, dan bertanggung jawab.","Mendengarkan pendapat teman saat berdiskusi.","🤝");
+ if(state.subject==="ipas")return card("Amati alam di sekitarmu","Perhatikan ciri benda, makhluk hidup, dan perubahan yang terjadi di lingkungan.","Tanaman membutuhkan air dan cahaya untuk tumbuh.","🌱");
+ if(state.subject==="pjok")return card("Tubuh sehat, bermain aman","Pilih kebiasaan yang menjaga kesehatan dan keselamatan saat bergerak.","Pemanasan sebelum olahraga dan minum air setelah bergerak.","🏃");
+ if(state.subject==="seni")return card("Amati dan ciptakan karya","Warna, garis, bentuk, bunyi, dan gerak dapat digunakan untuk berkarya.","Merah dan kuning dapat dicampur menjadi jingga.","🎨");
+ if(state.subject==="english")return card("Lihat, dengar, lalu ucapkan","Hubungkan kata bahasa Inggris dengan arti atau gambar yang sesuai.","cat = kucing; book = buku; blue = biru.","🔤");
+ if(state.subject==="agama")return card("Pilih perilaku baik","Kebiasaan baik terlihat melalui kejujuran, kepedulian, disiplin, dan rasa syukur.","Mengakui kesalahan lalu meminta maaf.","💛");
+ if(state.subject==="lokal")return card("Kenali lingkungan dan budaya","Budaya dan lingkungan perlu dihargai serta dijaga bersama.","Menjaga kebersihan tempat wisata dan mengenal permainan daerah.","🏝️");
+ // Materi umum per mata pelajaran agar tidak ada soal yang tampil tanpa pengantar konsep.
+ if(state.subject==="math")return card("Pahami soal matematika","Kenali dulu topik yang ditanyakan, lalu gunakan rumus, gambar, atau langkah yang sesuai. Jangan memakai contoh benda jika soal sedang membahas pecahan, persen, ukuran, atau bentuk.","Untuk soal bilangan, tulis angka yang diketahui dan tentukan operasi yang dibutuhkan sebelum menghitung.","🔢");
+ if(state.subject==="indo")return card("Pahami isi kalimat","Baca kalimat dengan perlahan. Cari kata penting dan pikirkan apa yang ditanyakan: arti kata, bagian kalimat, atau isi bacaan.","Untuk memahami cerita, tanyakan: siapa yang dibicarakan, apa yang terjadi, dan apa pesan atau inti ceritanya.","📖");
+ if(state.subject==="pancasila")return card("Pahami hidup bersama","Saat memilih tindakan, pikirkan apakah tindakan itu adil, menghormati orang lain, menaati kesepakatan, dan bertanggung jawab.","Saat berdiskusi, dengarkan pendapat teman dan bergiliran berbicara.","🤝");
+ if(state.subject==="ipas")return card("Amati dan cari bukti","Pelajari ciri benda atau makhluk hidup, perubahan yang terjadi, dan hubungan sebab-akibatnya.","Amati tanaman: bagian-bagiannya berbeda fungsi, tetapi bekerja bersama agar tanaman hidup.","🔍");
+ if(state.subject==="seni")return card("Amati unsur karya","Perhatikan warna, garis, bentuk, bunyi, pola, atau gerak yang disebutkan dalam soal.","Sebutkan ciri yang kamu lihat atau dengar sebelum memilih jawaban.","🎨");
+ if(state.subject==="pjok")return card("Pahami gerak dan kesehatan","Pikirkan cara bergerak yang benar, aman, dan menjaga kesehatan tubuh.","Lakukan pemanasan sebelum olahraga dan ikuti aturan permainan.","🏃");
+ if(state.subject==="english")return card("Pahami kata dan ungkapan","Perhatikan kata bahasa Inggris dalam soal dan hubungkan dengan situasi, gambar, atau arti yang sesuai.","Contoh: hello digunakan untuk menyapa; thank you digunakan untuk berterima kasih.","🔤");
+ if(state.subject==="agama")return card("Pahami nilai kebaikan","Pertimbangkan tindakan yang menunjukkan kejujuran, rasa hormat, kepedulian, dan tanggung jawab.","Jika melakukan kesalahan, berkata jujur dan berusaha memperbaikinya.","💛");
+ return card("Pahami soal selangkah demi selangkah","Perhatikan kata-kata penting pada pertanyaan. Hubungkan dengan materi yang sudah dipelajari, lalu bandingkan setiap pilihan.","Amati petunjuknya, pikirkan contoh sederhana, lalu tentukan jawabanmu sendiri.","💡");
+}
+
+function renderQuestion(){
+ const q=state.questions[state.qIndex];
+ document.getElementById("quizEyebrow").textContent=`${SUBJECTS.find(s=>s.id===state.subject).name} • Bab ${state.chapter+1}`;
+ document.getElementById("quizHeading").textContent=state.practice?"Latihan interaktif":"Kuis akhir bab";document.getElementById("quizMode").textContent=state.practice?"Latihan":"Kuis akhir";document.getElementById("qNum").textContent=state.qIndex+1;document.getElementById("qTotal").textContent=state.questions.length;document.getElementById("roundScore").textContent=state.roundScore;document.getElementById("questionText").textContent=q.q;
+ const visual=document.getElementById("questionVisual");visual.classList.remove("hidden");visual.classList.remove('is-playing');if(visual._storyTimers)visual._storyTimers.forEach(clearTimeout);visual._mathStory=null;
+ const story=state.subject==='math'?getMathStory(q.q):null;
+ if(story){
+  const mathConcept=getConceptMiniLesson(q.q);
+  visual._mathStory=story;
+  visual.innerHTML=`<div class="math-story">${quizMascotRow("Ayo, kita hitung bersama!", "Perhatikan benda yang datang atau pergi.")}${mathConcept}<div class="math-story-title">🧺 Ayo lihat bendanya bergerak!</div><div class="math-scene"><div class="math-group" id="mathLeft">${objectIcons(story.a,story.emoji)}<span class="math-group-label">Awalnya: ${story.a}</span></div><div class="math-op">${story.op==='add'?'+':story.op==='subtract'?'−':'×'}</div><div class="math-group ${story.op==='subtract'?'outgoing':'incoming'}" id="mathRight"><span class="math-group-label">${story.op==='subtract'?'Diambil:':'Datang lagi:'} ${story.b}</span></div><div class="math-op">=</div><div class="math-group" id="mathResult"><span class="math-group-label">🤔 Coba hitung sendiri!</span></div></div><div id="mathCaption" class="math-story-caption">Amati benda yang bergerak. Hasilnya baru muncul setelah kamu menjawab.</div><div class="math-story-controls"><button type="button" class="green" onclick="playMathStory()">▶ Putar ulang animasi</button></div><div class="tiny">Jawab dulu sebelum melihat hasilnya.</div></div>`;
+  playMathStory();
+ }else{
+  const qText=q.q.toLowerCase();
+  let title="🌟 Amati petunjuk gambar",caption="Lihat gambar dan pilih jawaban yang paling cocok.",scene=[];
+  // Ilustrasi berubah mengikuti isi pertanyaan, bukan hanya memakai ikon mata pelajaran yang sama.
+  if(state.subject==="indo" && /tanda baca|kalimat tanya|tanya/.test(qText)){
+   title="💬 Kalimat sedang bertanya";caption="Baca kalimatnya bersama tokoh. Tanda apa yang harus ada di akhir pertanyaan?";
+   scene=[`<div class="question-card"><span class="hint-object">🧒</span><span>“Siapa namamu<span class="punctuation-blank"> ? . , !</span>”</span></div>`,`<div class="question-card"><span class="hint-object">❓</span><span class="tiny">Pilih tanda yang cocok di pilihan jawaban.</span></div>`];
+  }else if(state.subject==="indo" && /santun|meminta bantuan|tolong/.test(qText)){
+   title="🗣️ Pilih ucapan yang baik";caption="Tokoh ingin meminta bantuan. Pilih kalimat yang sopan.";scene=[`<div class="question-card"><span class="hint-object">🧒</span><span>“Tolong bantu saya, ya.”</span></div>`,`<div class="question-card"><span class="hint-object">🤝</span><span class="tiny">Kata-kata yang baik membuat teman nyaman.</span></div>`];
+  }else if(state.subject==="ipas" && /akar|tumbuhan|tanam|pohon|fotosint/.test(qText)){
+   title="🌱 Kenali tumbuhan";caption="Amati bagian tumbuhan dan pilih jawaban yang sesuai.";scene=[`<div class="hint-object">☀️</div><div class="scene-arrow">↓</div><div class="hint-object">🌿</div><div class="scene-arrow">↓</div><div class="hint-object">🟤</div>`];
+  }else if(state.subject==="ipas" && /membeku|es|mencair|air/.test(qText)){
+   title="💧 Air bisa berubah";caption="Perhatikan perubahan air, lalu pilih nama prosesnya.";scene=[`<div class="question-card"><span class="hint-object">💧</span><span>Air</span></div><div class="scene-arrow">→</div><div class="question-card"><span class="hint-object">🧊</span><span>Es</span></div>`];
+  }else if(state.subject==="pancasila" && /menghormati|berbeda agama|berbeda suku|menolong|teman/.test(qText)){
+   title="🤝 Apa sikap yang baik?";caption="Lihat situasinya. Pilih tindakan yang membuat teman merasa dihargai.";scene=[`<div class="question-card"><span class="hint-object">🧒</span><span class="hint-object">🧕</span><span class="hint-object">😊</span></div>`,`<div class="tiny">Bersikap baik kepada semua teman.</div>`];
+  }else if(state.subject==="indo" && /ide pokok|gagasan utama|paragraf/.test(qText)){
+   title="📖 Temukan gagasan utama";caption="Baca paragraf pendek ini. Pikirkan hal yang paling banyak dibicarakan sebelum memilih.";scene=[`<div class="question-card" style="display:block;text-align:left;max-width:560px"><span class="hint-object">👧</span><b>Paragraf contoh</b><p style="margin:8px 0">“Dina suka membaca. Setiap sore, Dina membaca buku cerita di teras. Ia meminjam buku dari perpustakaan.”</p><span class="tiny">Kalimat-kalimat ini membahas hal utama apa?</span></div>`,`<div class="question-card"><span class="hint-object">💭</span><span>Pikirkan inti paragraf, bukan detail kecil.</span></div>`];
+  }else if(state.subject==="indo" && /sinonim/.test(qText)){
+   title="🔤 Kata yang artinya mirip";caption="Sinonim adalah kata yang artinya sama atau hampir sama. Lihat contoh, lalu pilih jawaban untuk kata di soal.";scene=[`<div class="question-card"><span class="hint-object">😊</span><b>senang ↔ gembira</b></div>`,`<div class="question-card"><span class="hint-object">🌼</span><b>indah ↔ elok</b></div>`];
+  }else if(state.subject==="indo" && /antonim|lawan kata/.test(qText)){
+   title="↔️ Kata yang berlawanan";caption="Antonim adalah kata yang artinya berlawanan. Amati beberapa contoh.";scene=[`<div class="question-card"><span class="hint-object">☀️</span><b>siang ↔ malam</b></div>`,`<div class="question-card"><span class="hint-object">🚪</span><b>masuk ↔ keluar</b></div>`];
+  }else if(state.subject==="math" && /diskon|persen|%|harga setelah/.test(qText.toLowerCase())){
+   title="💸 Ayo pahami diskon";caption="Diskon mengurangi harga. Hitung nilai potongan terlebih dahulu, lalu kurangi harga awal. Jawaban soal utama belum ditampilkan.";scene=[`<div class="question-card"><span class="hint-object">🏷️</span><div><b>Harga awal</b><div>Rp50.000</div></div></div>`,`<div class="question-card"><span class="hint-object">🔻 10%</span><div><b>Potongan contoh</b><div>Rp5.000</div></div><span class="scene-arrow">→</span><div><b>Bayar</b><div>Rp45.000</div></div></div>`,`<div class="tiny">Contoh ini hanya untuk memahami langkah. Sekarang kerjakan angka pada soalmu.</div>`];
+  }else if(state.subject==="english"){
+   title="🔊 Lihat dan ucapkan";caption="Amati gambar dan cocokkan dengan kata bahasa Inggris.";let word=/biru/.test(qText)?["🔵","BLUE"]:/kucing|cat/.test(qText)?["🐱","CAT"]:/please|tolong/.test(qText)?["🙏","PLEASE"]:/how are you/.test(qText)?["😊","I AM FINE"]:["👋","HELLO"];
+   scene=[`<div class="question-card"><span class="hint-object">${word[0]}</span><b>${word[1]}</b></div>`,`<div class="tiny">Tekan “Bacakan soal” untuk mendengarkan.</div>`];
+  }else if(state.subject==="pjok"){
+   title="🏃 Ayo bergerak sehat";caption="Perhatikan kegiatan dan pilih tindakan yang aman dan sehat.";scene=[`<div class="question-card"><span class="hint-object">🤸</span><span class="scene-arrow">→</span><span class="hint-object">💧</span></div>`,`<div class="tiny">Pemanasan, bermain dengan aman, lalu minum air.</div>`];
+  }else if(state.subject==="seni"){
+   title="🎨 Amati warna dan bentuk";caption="Lihat contoh karya, lalu pilih jawaban yang sesuai.";scene=[`<div class="question-card"><span class="hint-object">🔴</span><span class="scene-arrow">+</span><span class="hint-object">🟡</span><span class="scene-arrow">→</span><span class="hint-object">🟠</span></div>`];
+  }else if(state.subject==="agama"){
+   title="💛 Pilih perbuatan baik";caption="Bayangkan situasi ini. Pilih tindakan yang jujur dan peduli.";scene=[`<div class="question-card"><span class="hint-object">🧒</span><span class="scene-arrow">→</span><span class="hint-object">🤝</span><span class="hint-object">💛</span></div>`];
+  }else if(state.subject==="lokal"){
+   title="🏝️ Jelajah lingkungan";caption="Amati budaya dan lingkungan sekitar, lalu pilih jawaban yang tepat.";scene=[`<div class="question-card"><span class="hint-object">🏡</span><span class="hint-object">🌳</span><span class="hint-object">🧺</span></div>`];
+  }else{
+   const subjectInfo=SUBJECTS.find(x=>x.id===state.subject);
+   title=`${subjectInfo.icon} Ayo pahami soal`;
+   caption="Perhatikan contoh yang berhubungan dengan pertanyaan. Pilih jawabanmu sendiri; hasilnya belum ditampilkan.";
+   const emoji=subjectInfo.icon;
+   scene=[`<div class="question-card"><span class="hint-object">${emoji}</span><span style="font-weight:700">Apa yang sudah kamu ketahui?</span></div>`,`<div class="question-card"><span class="hint-object">💭</span><span class="tiny">Pikirkan arti pertanyaan dan ingat contoh dari materi.</span></div>`];
+  }
+  const conceptLesson=getConceptMiniLesson(qText);
+  visual.innerHTML=`<div>${quizMascotRow("Ayo, kita pikirkan bersama!", "Perhatikan petunjuknya, lalu pilih jawabanmu.")}${conceptLesson}<div class="quiz-visual question-scene">${scene.join("")}</div><b>${title}</b><p class="tiny">${caption}</p></div>`;
+ }
+ document.getElementById("options").innerHTML=q.options.map((o,i)=>`<button class="quiz-option" data-index="${i}" onclick="selectOption(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join("");document.getElementById("feedback").className="feedback hidden";document.getElementById("feedback").textContent="";document.getElementById("submitAnswer").classList.remove("hidden");document.getElementById("submitAnswer").disabled=false;document.getElementById("nextQuestion").classList.add("hidden");document.getElementById("quizProgress").style.width=(state.qIndex/state.questions.length*100)+"%";state.selected=null;state.answered=false;document.getElementById("quizTip").textContent=state.grade<=2?"Tekan 🔊 untuk mendengarkan soal. Lihat gambar, lalu pilih jawaban!":"Periksa semua pilihan sebelum menentukan jawaban."
+}
+function selectOption(i){if(state.answered)return;state.selected=i;document.querySelectorAll(".quiz-option").forEach((b,j)=>{b.style.borderColor=j===i?"#6387f2":"#dfe6fa";b.style.background=j===i?"#e8efff":"#f5f7ff"});playTone(500,.06)}
+function checkAnswer(){if(state.selected===null){toast("Pilih salah satu jawaban terlebih dahulu.");return}let q=state.questions[state.qIndex],correct=state.selected===q.correct;state.answered=true;state.answers.push({q:q.q,chosen:q.options[state.selected],correctAnswer:q.options[q.correct],correct,explain:q.explain});revealMathAnswer();if(correct){state.roundScore++;playTone(880,.16)}else playTone(240,.2);document.querySelectorAll(".quiz-option").forEach((b,j)=>{b.disabled=true;if(j===q.correct)b.classList.add("correct");if(j===state.selected&&!correct)b.classList.add("wrong")});let f=document.getElementById("feedback");f.className="feedback "+(correct?"good":"bad");f.innerHTML=(correct?"🎉 Benar! Hebat! ":"💡 Belum tepat. ")+q.explain;document.getElementById("submitAnswer").classList.add("hidden");document.getElementById("nextQuestion").classList.remove("hidden");document.getElementById("nextQuestion").textContent=state.qIndex===state.questions.length-1?"Lihat hasil →":"Soal berikutnya →";document.getElementById("roundScore").textContent=state.roundScore;document.getElementById("quizProgress").style.width=((state.qIndex+1)/state.questions.length*100)+"%"}
+function nextQuestion(){if(!state.answered)return;if(state.qIndex<state.questions.length-1){state.qIndex++;renderQuestion()}else showResult()}
+function showResult(){let total=state.questions.length,score=Math.round(state.roundScore/total*100),pass=score>=60,earnedStars=score>=90?3:score>=75?2:score>=60?1:0,earnedCoins=state.roundScore*2;let k=key(state.grade,state.subject,state.chapter);if(state.practice){state.practiceDone[k]=true;updateLessonProgress();document.getElementById("resultTitle").textContent=pass?"Latihan selesai!":"Latihan selesai, ayo belajar lagi!";document.getElementById("resultMessage").textContent=`Kamu menjawab ${state.roundScore} dari ${total} soal dengan benar. Latihan sudah tercatat. Sekarang kamu bisa mengikuti kuis akhir; nilai minimal 60% untuk membuka bab berikutnya.`;earnedStars=0;earnedCoins=state.roundScore; }else if(pass){if(!state.completed[k]){state.completed[k]=true;updateLessonProgress();state.stars+=earnedStars;state.coins+=earnedCoins;}else{state.coins+=Math.max(1,Math.floor(earnedCoins/2));}state.best[k]=Math.max(state.best[k]||0,score);if(state.completed[k]&&totalDone(state.grade,state.subject)===DATA[state.grade][state.subject].length){let badge=`dunia-${state.grade}-${state.subject}`;if(!state.badges.includes(badge)){state.badges.push(badge);toast("Lencana dunia baru didapat! 🏅")}}document.getElementById("resultTitle").textContent="Bab berhasil dituntaskan!";document.getElementById("resultMessage").textContent=`Kamu menjawab ${state.roundScore} dari ${total} soal dengan benar. Bab berikutnya kini terbuka. Teruskan petualanganmu!`;}else{document.getElementById("resultTitle").textContent="Sedikit lagi, penjelajah!";document.getElementById("resultMessage").textContent=`Nilaimu ${score}%. Nilai minimal 60% untuk membuka bab berikutnya. Pelajari lagi materi, lalu coba kuis baru dengan urutan soal berbeda.`;earnedStars=0;earnedCoins=Math.floor(earnedCoins/2);state.coins+=earnedCoins;state.best[k]=Math.max(state.best[k]||0,score)}saveState();document.getElementById("resultScore").textContent=score+"%";document.getElementById("resultStars").textContent=earnedStars;document.getElementById("resultCoins").textContent=earnedCoins;document.getElementById("resultArt").textContent=pass?"🏆🎉":"💪📘";document.getElementById("reviewList").innerHTML=state.answers.map((a,i)=>`<div class="callout" style="border-left-color:${a.correct?"#39b982":"#ffb928"}"><b>${i+1}. ${a.q}</b><p style="margin:5px 0">Jawabanmu: ${a.chosen} ${a.correct?"✅":"❌"}</p>${a.correct?"":"<p style='margin:5px 0'><b>Jawaban benar:</b> "+a.correctAnswer+"</p>"}<p style="margin:5px 0">${a.explain}</p></div>`).join("");showScreen("result")}
+function continueAfterResult(){if(!state.practice&&isDone(state.grade,state.subject,state.chapter)){let lessons=DATA[state.grade][state.subject];let next=state.chapter+1;if(next<lessons.length){state.chapter=next;saveState();openChapter(next);return;}toast("Semua bab pada mata pelajaran ini selesai! Pilih mata pelajaran lain untuk melanjutkan.");}saveState();showScreen("mapScreen")}
+function retryQuiz(){startQuiz(state.practice)}
+function backToMap(){showScreen("mapScreen")}
+function backToLesson(){showScreen("lesson")}
+function showHelp(){showScreen("help")}
+function resetProgress(){if(confirm("Yakin ingin menghapus semua progres, bintang, koin, dan lencana di browser ini?")){localStorage.removeItem("petualanganCerdasV1");location.reload()}}
+document.addEventListener("keydown",e=>{if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","w","a","s","d","W","A","S","D"].includes(e.key))return;if(document.getElementById("mapScreen").classList.contains("active")){e.preventDefault();let dx=0,dy=0;if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")dx=-3;if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")dx=3;if(e.key==="ArrowUp"||e.key.toLowerCase()==="w")dy=3;if(e.key==="ArrowDown"||e.key.toLowerCase()==="s")dy=-3;state.position.x=Math.max(0,Math.min(80,(state.position.x||8)+dx));state.position.y=Math.max(0,Math.min(35,(state.position.y||8)+dy));let av=document.getElementById("mapAvatar");av.style.left=state.position.x+"%";av.style.bottom=(8+state.position.y)+"%";playTone(330,.04)}})
+loadState();renderHome();renderClasses();updateStats();document.getElementById("soundBtn").textContent=state.sound?"🔊 Suara: ON":"🔇 Suara: OFF";
+</script>
+</body></html>
